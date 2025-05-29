@@ -6,11 +6,10 @@ namespace Fraction;
 
 use Closure;
 use Fraction\Contracts\ShouldInterpreter;
-use Fraction\Exceptions\UnallowedThenForItself;
 use Fraction\Interpreters\AsDefault;
 use Fraction\Interpreters\AsDefer;
 use Fraction\Interpreters\AsQueue;
-use Fraction\Support\FractionName;
+use Fraction\ValueObjects\Then;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
@@ -58,14 +57,9 @@ final class FractionBuilder
         return $result;
     }
 
-    /** @throws UnallowedThenForItself */
     public function then(string|UnitEnum $action): self
     {
-        if ($this->action === FractionName::format($action)) {
-            throw new UnallowedThenForItself();
-        }
-
-        $this->then[] = $action;
+        $this->then[] = new Then($this->action, $action);
 
         return $this;
     }

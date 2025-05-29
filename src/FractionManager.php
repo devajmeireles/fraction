@@ -25,15 +25,17 @@ class FractionManager
      */
     public function register(string|UnitEnum $action, Closure $closure): FractionBuilder
     {
-        $formatted = FractionName::format($action);
+        $original = $action;
 
-        if (isset($this->fractions[$formatted])) {
+        $action = FractionName::format($action);
+
+        if (isset($this->fractions[$action])) {
             throw new UnallowedActionDuplication($action);
         }
 
-        $builder = new FractionBuilder($this->application, $formatted, $closure);
+        $builder = new FractionBuilder($this->application, $original, $closure);
 
-        $this->fractions[$formatted] = $builder;
+        $this->fractions[$action] = $builder;
 
         return $builder;
     }
@@ -43,9 +45,11 @@ class FractionManager
      */
     public function get(string|UnitEnum $action): mixed
     {
+        $original = $action;
+
         $action = FractionName::format($action);
 
-        return $this->fractions[$action] ?? throw new ActionNotRegistered($action);
+        return $this->fractions[$action] ?? throw new ActionNotRegistered($original);
     }
 
     public function boot(): void
