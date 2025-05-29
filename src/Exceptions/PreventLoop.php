@@ -6,7 +6,7 @@ namespace Fraction\Exceptions;
 
 use Exception;
 
-class PreventLoop extends Exception
+final class PreventLoop extends Exception
 {
     public function __construct()
     {

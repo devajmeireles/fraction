@@ -33,6 +33,11 @@ arch()
         AsDefault::class,
         AsQueue::class,
         AsDefer::class,
+    ])
+    ->toHaveMethods([
+        'dependencies',
+        'then',
+        'hooks',
     ]);
 
 arch()
@@ -62,6 +67,7 @@ arch()
         UnallowedActionDuplication::class,
     ])
     ->toHaveConstructor()
+    ->toBeFinal()
     ->toExtend(Exception::class);
 
 arch()
@@ -114,6 +120,7 @@ arch()
 
 arch()
     ->expect(FractionName::class)
+    ->toBeFinal()
     ->toHaveMethod('format');
 
 arch()

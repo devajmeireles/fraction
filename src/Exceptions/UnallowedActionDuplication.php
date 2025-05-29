@@ -6,7 +6,7 @@ namespace Fraction\Exceptions;
 
 use Exception;
 
-class UnallowedActionDuplication extends Exception
+final class UnallowedActionDuplication extends Exception
 {
     public function __construct(string $action)
     {

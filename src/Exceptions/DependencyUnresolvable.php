@@ -6,7 +6,7 @@ namespace Fraction\Exceptions;
 
 use Exception;
 
-class DependencyUnresolvable extends Exception
+final class DependencyUnresolvable extends Exception
 {
     public function __construct(string $name, string $action)
     {

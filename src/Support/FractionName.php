@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use UnitEnum;
 
-class FractionName
+final class FractionName
 {
     public static function format(string|UnitEnum $action): string
     {

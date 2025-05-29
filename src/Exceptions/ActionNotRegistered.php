@@ -6,7 +6,7 @@ namespace Fraction\Exceptions;
 
 use Exception;
 
-class ActionNotRegistered extends Exception
+final class ActionNotRegistered extends Exception
 {
     public function __construct(string $action)
     {

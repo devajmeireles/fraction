@@ -28,7 +28,7 @@ trait ShareableInterpreter
         ]);
     }
 
-    public function then(array $then): self
+    final public function then(array $then): self
     {
         $this->then = $then;
 
