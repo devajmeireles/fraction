@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace Fraction;
 
 use Closure;
-use Fraction\Facades\Fraction;
-use Fraction\Jobs\FractionJob;
-use Fraction\Support\DependencyResolver;
+use Fraction\Contracts\ShouldInterpreter;
+use Fraction\Interpreters\AsDefault;
+use Fraction\Interpreters\AsDefer;
+use Fraction\Interpreters\AsQueue;
 use Illuminate\Foundation\Application;
 use Laravel\SerializableClosure\SerializableClosure;
 use RuntimeException;
-
-use function Illuminate\Support\defer;
 
 final class FractionBuilder
 {
@@ -35,33 +34,26 @@ final class FractionBuilder
     /** @throws @throws ReflectionException|BindingResolutionException|InvalidArgumentException */
     public function __invoke(...$arguments): mixed
     {
-        foreach ($this->before as $before) {
-            $before = Fraction::get($before);
+        $interpret = match (true) {
+            $this->queued === true   => AsQueue::class,
+            $this->deferred === true => AsDefer::class,
+            default                  => AsDefault::class,
+        };
 
-            $before();
-        }
-
-        $dependencies = $this->application->make(DependencyResolver::class, [
-            'action' => $this->action,
+        /** @var ShouldInterpreter $interpreter */
+        $interpreter = $this->application->make($interpret, [
+            'action'    => $this->action,
+            'arguments' => $arguments,
+            'closure'   => new SerializableClosure($this->closure),
         ]);
 
-        $resolve = $dependencies->resolve(...);
+        $result = $interpreter->handle($this->application);
 
-        return (match (true) {
-            $this->queued === true   => fn () => dispatch(new FractionJob($this->action, $arguments, new SerializableClosure($this->closure))),
-            $this->deferred === true => fn () => defer(fn () => $resolve($this->closure, $arguments)),
-            default                  => function () use ($resolve, $arguments) {
-                $result = $resolve($this->closure, $arguments);
+        if ($this->queued || $this->deferred) {
+            return true;
+        }
 
-                foreach ($this->after as $after) {
-                    $after = Fraction::get($after);
-
-                    $after();
-                }
-
-                return $result;
-            },
-        })();
+        return $result;
     }
 
     public function before(string $action): self
