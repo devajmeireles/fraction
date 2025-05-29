@@ -6,6 +6,7 @@ namespace Fraction;
 
 use Closure;
 use Fraction\Facades\Fraction;
+use Fraction\Interpreters\AsQueue;
 use Fraction\Jobs\FractionJob;
 use Fraction\Support\DependencyResolver;
 use Illuminate\Foundation\Application;
@@ -42,7 +43,7 @@ final class FractionBuilder
         }
 
         if ($this->queued) {
-            dispatch(new FractionJob($this->action, $arguments, new SerializableClosure($this->closure)));
+            dispatch(new AsQueue($this->action, $arguments, new SerializableClosure($this->closure)));
 
             return true;
         }

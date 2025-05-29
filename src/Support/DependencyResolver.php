@@ -8,6 +8,7 @@ use Closure;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
+use Laravel\SerializableClosure\SerializableClosure;
 use ReflectionException;
 use ReflectionFunction;
 
@@ -26,8 +27,12 @@ final readonly class DependencyResolver
      *
      * @throws ReflectionException|BindingResolutionException|InvalidArgumentException
      */
-    public function resolve(Closure $closure, array $arguments = []): mixed
+    public function resolve(Closure|SerializableClosure $closure, array $arguments = []): mixed
     {
+        $closure = $closure instanceof SerializableClosure
+            ? $closure->getClosure()
+            : $closure;
+
         $reflection = new ReflectionFunction($closure);
 
         $parameters = $reflection->getParameters();
