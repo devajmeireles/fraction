@@ -53,9 +53,7 @@ final class FractionBuilder
             'closure'   => new SerializableClosure($this->closure),
         ]);
 
-        $interpreter->hooks();
-
-        $result = $interpreter->handle($this->application);
+        $result = $interpreter->hooks($this->before, $this->after)->handle($this->application);
 
         if ($this->queued || $this->deferred) {
             return true;

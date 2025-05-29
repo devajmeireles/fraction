@@ -10,5 +10,5 @@ interface ShouldInterpreter
 {
     public function handle(Container $container): mixed;
 
-    public function hooks(array $before, array $after): void;
+    public function hooks(array $before, array $after): self;
 }

@@ -20,7 +20,7 @@ trait ShareableInterpreter
         // ...
     }
 
-    final public function dependencies(Container $container): mixed
+    final public function dependencies(Container $container): DependencyResolver
     {
         return $container->make(DependencyResolver::class, [
             'action'      => $this->action,

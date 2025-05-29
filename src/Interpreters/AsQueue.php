@@ -18,10 +18,12 @@ final class AsQueue implements ShouldInterpreter
         return FractionJob::dispatch($this->action, $this->arguments, $this->closure);
     }
 
-    public function hooks(array $before, array $after): void
+    public function hooks(array $before, array $after): self
     {
         $this->before = $before;
 
         $this->after = $after;
+
+        return $this;
     }
 }

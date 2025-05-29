@@ -26,10 +26,12 @@ final class AsDefer implements ShouldInterpreter
         return true;
     }
 
-    public function hooks(array $before, array $after): void
+    public function hooks(array $before, array $after): self
     {
         $this->before = $before;
 
         $this->after = $after;
+
+        return $this;
     }
 }
