@@ -9,16 +9,20 @@ use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Interpreters\AsDefault;
 use Fraction\Interpreters\AsDefer;
 use Fraction\Interpreters\AsQueue;
+use Fraction\Support\FractionName;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
 use RuntimeException;
+use UnitEnum;
 
 final class FractionBuilder
 {
+    /** @var array<string, Closure> */
     public array $before = [];
 
+    /** @var array<string, Closure> */
     public array $after = [];
 
     public bool $queued = false;
@@ -49,6 +53,8 @@ final class FractionBuilder
             'closure'   => new SerializableClosure($this->closure),
         ]);
 
+        $interpreter->hooks();
+
         $result = $interpreter->handle($this->application);
 
         if ($this->queued || $this->deferred) {
@@ -58,8 +64,10 @@ final class FractionBuilder
         return $result;
     }
 
-    public function before(string $action): self
+    public function before(string|UnitEnum $action): self
     {
+        $action = FractionName::format($action);
+
         if ($this->action === $action) {
             throw new RuntimeException("Cannot set before action to itself: {$this->action}");
         }
@@ -69,8 +77,10 @@ final class FractionBuilder
         return $this;
     }
 
-    public function after(string $action): self
+    public function after(string|UnitEnum $action): self
     {
+        $action = FractionName::format($action);
+
         if ($this->action === $action) {
             throw new RuntimeException("Cannot set after action to itself: {$this->action}");
         }

@@ -4,17 +4,24 @@ declare(strict_types=1);
 
 namespace Fraction\Interpreters;
 
-use Fraction\Concerns\ShareableInterpreterConstructor;
+use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Jobs\FractionJob;
 use Illuminate\Container\Container;
 
 final class AsQueue implements ShouldInterpreter
 {
-    use ShareableInterpreterConstructor;
+    use ShareableInterpreter;
 
     public function handle(Container $container): mixed
     {
         return FractionJob::dispatch($this->action, $this->arguments, $this->closure);
+    }
+
+    public function hooks(array $before, array $after): void
+    {
+        $this->before = $before;
+
+        $this->after = $after;
     }
 }

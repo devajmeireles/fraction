@@ -9,4 +9,6 @@ use Illuminate\Container\Container;
 interface ShouldInterpreter
 {
     public function handle(Container $container): mixed;
+
+    public function hooks(array $before, array $after): void;
 }

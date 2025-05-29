@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Fraction\Interpreters;
 
-use Fraction\Concerns\ShareableInterpreterConstructor;
+use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Contracts\ShouldInterpreter;
 use Illuminate\Container\Container;
 use RuntimeException;
 
 final class AsDefer implements ShouldInterpreter
 {
-    use ShareableInterpreterConstructor;
+    use ShareableInterpreter;
 
     public function handle(Container $container): mixed
     {
@@ -24,5 +24,12 @@ final class AsDefer implements ShouldInterpreter
         \Illuminate\Support\defer(fn () => $dependencies->resolve($this->closure, $this->arguments));
 
         return true;
+    }
+
+    public function hooks(array $before, array $after): void
+    {
+        $this->before = $before;
+
+        $this->after = $after;
     }
 }
