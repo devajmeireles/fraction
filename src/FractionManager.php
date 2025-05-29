@@ -59,7 +59,7 @@ class FractionManager
         foreach ($files as $file) {
             $content = file_get_contents($file);
 
-            if (mb_strpos($content, 'execute(') === false) {
+            if (mb_strpos($content, 'namespace') !== false || mb_strpos($content, 'execute') !== false) {
                 continue;
             }
 
