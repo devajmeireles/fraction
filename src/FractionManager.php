@@ -28,8 +28,6 @@ class FractionManager
             throw new RuntimeException("Action '$action' is already registered.");
         }
 
-        // $closure = $this->application->wrap($closure);
-
         $builder = new FractionBuilder($this->application, $action, $closure);
 
         $this->fractions[$action] = $builder;

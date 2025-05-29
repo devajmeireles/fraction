@@ -9,7 +9,9 @@ use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Interpreters\AsDefault;
 use Fraction\Interpreters\AsDefer;
 use Fraction\Interpreters\AsQueue;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
+use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
 use RuntimeException;
 
@@ -31,13 +33,13 @@ final class FractionBuilder
         // ...
     }
 
-    /** @throws @throws ReflectionException|BindingResolutionException|InvalidArgumentException */
+    /** @throws BindingResolutionException|InvalidArgumentException */
     public function __invoke(...$arguments): mixed
     {
         $interpret = match (true) {
-            $this->queued === true   => AsQueue::class,
-            $this->deferred === true => AsDefer::class,
-            default                  => AsDefault::class,
+            $this->queued   => AsQueue::class,
+            $this->deferred => AsDefer::class,
+            default         => AsDefault::class,
         };
 
         /** @var ShouldInterpreter $interpreter */

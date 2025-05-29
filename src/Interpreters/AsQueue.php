@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace Fraction\Interpreters;
 
+use Fraction\Concerns\ShareableInterpreterConstructor;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Jobs\FractionJob;
 use Illuminate\Container\Container;
-use Laravel\SerializableClosure\SerializableClosure;
 
 final class AsQueue implements ShouldInterpreter
 {
-    public function __construct(
-        public string $action,
-        public array $arguments,
-        public SerializableClosure $closure,
-    ) {
-        //
-    }
+    use ShareableInterpreterConstructor;
 
     public function handle(Container $container): mixed
     {

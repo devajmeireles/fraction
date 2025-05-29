@@ -4,21 +4,16 @@ declare(strict_types=1);
 
 namespace Fraction\Interpreters;
 
+use Fraction\Concerns\ShareableInterpreterConstructor;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Support\DependencyResolver;
 use Illuminate\Container\Container;
-use Illuminate\Support\Facades\Concurrency;
-use Laravel\SerializableClosure\SerializableClosure;
+
+use function Illuminate\Support\defer;
 
 final class AsDefer implements ShouldInterpreter
 {
-    public function __construct(
-        public string $action,
-        public array $arguments,
-        public SerializableClosure $closure,
-    ) {
-        //
-    }
+    use ShareableInterpreterConstructor;
 
     public function handle(Container $container): mixed
     {
@@ -27,7 +22,7 @@ final class AsDefer implements ShouldInterpreter
             'application' => $container,
         ]);
 
-        Concurrency::defer(fn () => $dependencies->resolve($this->closure, $this->arguments));
+        defer(fn () => $dependencies->resolve($this->closure, $this->arguments));
 
         return true;
     }

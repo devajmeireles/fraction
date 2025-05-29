@@ -4,22 +4,16 @@ declare(strict_types=1);
 
 namespace Fraction\Interpreters;
 
+use Fraction\Concerns\ShareableInterpreterConstructor;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Support\DependencyResolver;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Laravel\SerializableClosure\SerializableClosure;
 use ReflectionException;
 
 final class AsDefault implements ShouldInterpreter
 {
-    public function __construct(
-        public string $action,
-        public array $arguments,
-        public SerializableClosure $closure,
-    ) {
-        // ...
-    }
+    use ShareableInterpreterConstructor;
 
     /**
      * @throws ReflectionException|BindingResolutionException
