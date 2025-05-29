@@ -6,17 +6,20 @@ namespace Fraction\Interpreters;
 
 use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Contracts\ShouldInterpreter;
+use Fraction\Exceptions\RequiresLaravelTwelve;
 use Illuminate\Container\Container;
-use RuntimeException;
 
 final class AsDefer implements ShouldInterpreter
 {
     use ShareableInterpreter;
 
+    /**
+     * @throws RequiresLaravelTwelve
+     */
     public function handle(Container $container): true
     {
         if (! function_exists('Illuminate\Support\defer')) {
-            throw new RuntimeException('Deferred actions should only be used in in Laravel 12 or later.');
+            throw new RequiresLaravelTwelve();
         }
 
         $dependencies = $this->dependencies($container);

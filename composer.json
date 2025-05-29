@@ -48,6 +48,9 @@
         "analyse": [
             "./vendor/bin/phpstan analyse --memory-limit=2G"
         ],
+        "rector": [
+            "vendor/bin/rector process --dry-run"
+        ],
         "ci": [
             "./vendor/bin/pint --test",
             "./vendor/bin/phpstan analyse --memory-limit=2G",

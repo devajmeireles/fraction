@@ -6,6 +6,7 @@ namespace Fraction;
 
 use Closure;
 use Fraction\Contracts\ShouldInterpreter;
+use Fraction\Exceptions\UnallowedThenForItself;
 use Fraction\Interpreters\AsDefault;
 use Fraction\Interpreters\AsDefer;
 use Fraction\Interpreters\AsQueue;
@@ -14,7 +15,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
-use RuntimeException;
 use UnitEnum;
 
 final class FractionBuilder
@@ -58,10 +58,11 @@ final class FractionBuilder
         return $result;
     }
 
+    /** @throws UnallowedThenForItself */
     public function then(string|UnitEnum $action): self
     {
         if ($this->action === FractionName::format($action)) {
-            throw new RuntimeException("Cannot set after action to itself: {$this->action}");
+            throw new UnallowedThenForItself();
         }
 
         $this->then[] = $action;

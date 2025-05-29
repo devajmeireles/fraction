@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Fraction\Support;
 
 use Closure;
+use Fraction\Exceptions\DependencyUnresolvable;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
-use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
 use ReflectionException;
 use ReflectionFunction;
@@ -27,7 +27,7 @@ final readonly class DependencyResolver
     /**
      * //
      *
-     * @throws ReflectionException|BindingResolutionException|InvalidArgumentException
+     * @throws ReflectionException|BindingResolutionException|DependencyUnresolvable
      */
     public function resolve(Closure|SerializableClosure $closure, array $arguments = []): mixed
     {
@@ -69,7 +69,7 @@ final readonly class DependencyResolver
             } elseif ($parameter->isDefaultValueAvailable()) {
                 $resolved[] = $parameter->getDefaultValue();
             } else {
-                throw new InvalidArgumentException("Cannot resolve parameter \${$parameter->getName()} in [{$this->action}]");
+                throw new DependencyUnresolvable($parameter->getName(), $this->action);
             }
         }
 
