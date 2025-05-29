@@ -1,0 +1,9 @@
+vendor
+coverage
+.phpunit.result.cache
+_DS_Store
+.idea
+.vscode
+.php-cs-fixer.cache
+.DS_Store
+.run
