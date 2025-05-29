@@ -6,7 +6,6 @@ namespace Fraction;
 
 use Closure;
 use Fraction\Facades\Fraction;
-use Fraction\Interpreters\AsQueue;
 use Fraction\Jobs\FractionJob;
 use Fraction\Support\DependencyResolver;
 use Illuminate\Foundation\Application;
@@ -42,33 +41,27 @@ final class FractionBuilder
             $before();
         }
 
-        if ($this->queued) {
-            dispatch(new AsQueue($this->action, $arguments, new SerializableClosure($this->closure)));
-
-            return true;
-        }
-
         $dependencies = $this->application->make(DependencyResolver::class, [
             'action' => $this->action,
         ]);
 
         $resolve = $dependencies->resolve(...);
 
-        if ($this->deferred) {
-            defer(fn () => $resolve($this->closure, $arguments));
+        return (match (true) {
+            $this->queued === true   => fn () => dispatch(new FractionJob($this->action, $arguments, new SerializableClosure($this->closure))),
+            $this->deferred === true => fn () => defer(fn () => $resolve($this->closure, $arguments)),
+            default                  => function () use ($resolve, $arguments) {
+                $result = $resolve($this->closure, $arguments);
 
-            return true;
-        }
+                foreach ($this->after as $after) {
+                    $after = Fraction::get($after);
 
-        $result = $resolve($this->closure, $arguments);
+                    $after();
+                }
 
-        foreach ($this->after as $after) {
-            $after = Fraction::get($after);
-
-            $after();
-        }
-
-        return $result;
+                return $result;
+            },
+        })();
     }
 
     public function before(string $action): self

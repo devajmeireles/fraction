@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fraction\Interpreters;
+namespace Fraction\Jobs;
 
 use Fraction\Support\DependencyResolver;
 use Illuminate\Container\Container;
@@ -12,7 +12,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Laravel\SerializableClosure\SerializableClosure;
 use ReflectionException;
 
-final class AsQueue implements ShouldQueue
+final class FractionJob implements ShouldQueue
 {
     use Queueable;
 
