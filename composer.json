@@ -5,7 +5,10 @@
     "autoload": {
         "psr-4": {
             "Fraction\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {
