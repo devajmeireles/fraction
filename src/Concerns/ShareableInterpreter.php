@@ -14,8 +14,7 @@ trait ShareableInterpreter
         public string $action,
         public array $arguments,
         public SerializableClosure $closure,
-        public array $before = [],
-        public array $after = [],
+        public array $then = [],
     ) {
         // ...
     }
@@ -26,5 +25,23 @@ trait ShareableInterpreter
             'action'      => $this->action,
             'application' => $container,
         ]);
+    }
+
+    public function then(array $then): self
+    {
+        $this->then = $then;
+
+        return $this;
+    }
+
+    final public function hooks(): void
+    {
+        if ($this->then === []) {
+            return;
+        }
+
+        foreach ($this->then as $hook) {
+            run($hook, ...$this->arguments);
+        }
     }
 }

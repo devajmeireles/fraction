@@ -23,15 +23,8 @@ final class AsDefer implements ShouldInterpreter
 
         \Illuminate\Support\defer(fn () => $dependencies->resolve($this->closure, $this->arguments));
 
+        $this->hooks();
+
         return true;
-    }
-
-    public function hooks(array $before, array $after): self
-    {
-        $this->before = $before;
-
-        $this->after = $after;
-
-        return $this;
     }
 }

@@ -20,6 +20,7 @@ final class FractionJob implements ShouldQueue
         protected string $action,
         protected array $arguments,
         protected SerializableClosure $closure,
+        public array $then = [],
     ) {
         // ...
     }
@@ -30,5 +31,13 @@ final class FractionJob implements ShouldQueue
         $application->make(DependencyResolver::class, [
             'action' => $this->action,
         ])->resolve($this->closure, $this->arguments);
+
+        if ($this->then === []) {
+            return;
+        }
+
+        foreach ($this->then as $hook) {
+            run($hook, ...$this->arguments);
+        }
     }
 }

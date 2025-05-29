@@ -19,11 +19,7 @@ use UnitEnum;
 
 final class FractionBuilder
 {
-    /** @var array<string, Closure> */
-    public array $before = [];
-
-    /** @var array<string, Closure> */
-    public array $after = [];
+    public array $then = [];
 
     public bool $queued = false;
 
@@ -53,7 +49,7 @@ final class FractionBuilder
             'closure'   => new SerializableClosure($this->closure),
         ]);
 
-        $result = $interpreter->hooks($this->before, $this->after)->handle($this->application);
+        $result = $interpreter->then($this->then)->handle($this->application);
 
         if ($this->queued || $this->deferred) {
             return true;
@@ -62,28 +58,13 @@ final class FractionBuilder
         return $result;
     }
 
-    public function before(string|UnitEnum $action): self
+    public function then(string|UnitEnum $action): self
     {
-        $action = FractionName::format($action);
-
-        if ($this->action === $action) {
-            throw new RuntimeException("Cannot set before action to itself: {$this->action}");
-        }
-
-        $this->before[] = $action;
-
-        return $this;
-    }
-
-    public function after(string|UnitEnum $action): self
-    {
-        $action = FractionName::format($action);
-
-        if ($this->action === $action) {
+        if ($this->action === FractionName::format($action)) {
             throw new RuntimeException("Cannot set after action to itself: {$this->action}");
         }
 
-        $this->after[] = $action;
+        $this->then[] = $action;
 
         return $this;
     }

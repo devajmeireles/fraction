@@ -15,15 +15,11 @@ final class AsQueue implements ShouldInterpreter
 
     public function handle(Container $container): mixed
     {
-        return FractionJob::dispatch($this->action, $this->arguments, $this->closure);
-    }
-
-    public function hooks(array $before, array $after): self
-    {
-        $this->before = $before;
-
-        $this->after = $after;
-
-        return $this;
+        return FractionJob::dispatch(
+            $this->action,
+            $this->arguments,
+            $this->closure,
+            $this->then
+        );
     }
 }
