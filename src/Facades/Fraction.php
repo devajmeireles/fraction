@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Facade;
 
 class Fraction extends Facade
 {
-    public static function getFacadeAccessor()
+    public static function getFacadeAccessor(): string
     {
         return 'fraction';
     }
