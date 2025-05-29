@@ -6,14 +6,14 @@ use Fraction\Facades\Fraction;
 use Fraction\FractionBuilder;
 
 if (! function_exists('execute')) {
-    function execute(string $action, Closure $closure): FractionBuilder
+    function execute(string|UnitEnum $action, Closure $closure): FractionBuilder
     {
         return Fraction::register($action, $closure);
     }
 }
 
 if (! function_exists('run')) {
-    function run(string $action, ...$args): mixed
+    function run(string|UnitEnum $action, ...$args): mixed
     {
         /** @var FractionBuilder $builder */
         $builder = Fraction::get($action);

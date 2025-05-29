@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Fraction;
 
 use Closure;
+use Fraction\Support\FractionName;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
 use RuntimeException;
+use UnitEnum;
 
 class FractionManager
 {
@@ -22,8 +24,10 @@ class FractionManager
         ];
     }
 
-    public function register(string $action, Closure $closure): FractionBuilder
+    public function register(string|UnitEnum $action, Closure $closure): FractionBuilder
     {
+        $action = FractionName::format($action);
+
         if (isset($this->fractions[$action])) {
             throw new RuntimeException("Action '$action' is already registered.");
         }
@@ -35,8 +39,10 @@ class FractionManager
         return $builder;
     }
 
-    public function get(string $action): mixed
+    public function get(string|UnitEnum $action): mixed
     {
+        $action = FractionName::format($action);
+
         return $this->fractions[$action] ?? throw new RuntimeException("Action '$action' is not registered.");
     }
 
