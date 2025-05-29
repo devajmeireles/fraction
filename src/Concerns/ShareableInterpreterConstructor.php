@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fraction\Concerns;
 
+use Fraction\Support\DependencyResolver;
+use Illuminate\Container\Container;
 use Laravel\SerializableClosure\SerializableClosure;
 
 trait ShareableInterpreterConstructor
@@ -14,5 +16,13 @@ trait ShareableInterpreterConstructor
         public SerializableClosure $closure,
     ) {
         // ...
+    }
+
+    final public function dependencies(Container $container): mixed
+    {
+        return $container->make(DependencyResolver::class, [
+            'action'      => $this->action,
+            'application' => $container,
+        ]);
     }
 }

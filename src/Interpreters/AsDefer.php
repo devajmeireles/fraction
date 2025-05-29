@@ -6,7 +6,6 @@ namespace Fraction\Interpreters;
 
 use Fraction\Concerns\ShareableInterpreterConstructor;
 use Fraction\Contracts\ShouldInterpreter;
-use Fraction\Support\DependencyResolver;
 use Illuminate\Container\Container;
 use RuntimeException;
 
@@ -20,10 +19,7 @@ final class AsDefer implements ShouldInterpreter
             throw new RuntimeException('Deferred actions should only be used in in Laravel 12 or later.');
         }
 
-        $dependencies = $container->make(DependencyResolver::class, [
-            'action'      => $this->action,
-            'application' => $container,
-        ]);
+        $dependencies = $this->dependencies($container);
 
         \Illuminate\Support\defer(fn () => $dependencies->resolve($this->closure, $this->arguments));
 
