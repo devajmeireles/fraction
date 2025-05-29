@@ -6,9 +6,11 @@ namespace Fraction;
 
 use Closure;
 use Fraction\Facades\Fraction;
+use Fraction\Jobs\FractionJob;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
+use Laravel\SerializableClosure\SerializableClosure;
 use ReflectionException;
 use ReflectionFunction;
 use RuntimeException;
@@ -31,7 +33,7 @@ class FractionBuilder
         // ...
     }
 
-    public function __invoke(...$args): mixed
+    public function __invoke(...$arguments): mixed
     {
         foreach ($this->before as $before) {
             $before = Fraction::get($before);
@@ -42,15 +44,15 @@ class FractionBuilder
         $result = null;
 
         /** @throws ReflectionException|BindingResolutionException|InvalidArgumentException */
-        $call = function () use ($args): mixed {
+        $call = function () use ($arguments): mixed {
             $reflection = new ReflectionFunction($this->closure);
 
             $parameters = $reflection->getParameters();
             $resolved   = [];
 
             foreach ($parameters as $index => $parameter) {
-                if (array_key_exists($index, $args)) {
-                    $resolved[] = $args[$index];
+                if (array_key_exists($index, $arguments)) {
+                    $resolved[] = $arguments[$index];
 
                     continue;
                 }
@@ -84,7 +86,7 @@ class FractionBuilder
         };
 
         if ($this->queued) {
-            dispatch($call);
+            dispatch(new FractionJob($this->action, $arguments, new SerializableClosure($this->closure)));
         } elseif ($this->deferred) {
             \Illuminate\Support\defer($call);
         } else {
