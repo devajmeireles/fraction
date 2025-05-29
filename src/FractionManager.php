@@ -7,7 +7,6 @@ namespace Fraction;
 use Closure;
 use Fraction\Support\FractionName;
 use Illuminate\Foundation\Application;
-use Illuminate\Support\Arr;
 use RuntimeException;
 use UnitEnum;
 
@@ -15,11 +14,9 @@ class FractionManager
 {
     public array $fractions = [];
 
-    public string|array $path = [];
-
     public function __construct(public Application $application)
     {
-        $this->path = config('fraction.paths');
+        //
     }
 
     public function register(string|UnitEnum $action, Closure $closure): FractionBuilder
@@ -44,27 +41,18 @@ class FractionManager
         return $this->fractions[$action] ?? throw new RuntimeException("Action '$action' is not registered.");
     }
 
-    public function mount(string|array $path): self
-    {
-        $path = Arr::wrap($path);
-
-        $this->path = array_merge($this->path, $path);
-
-        return $this;
-    }
-
     public function boot(): void
     {
-        foreach ($this->path as $path) {
-            if (! is_dir($path)) {
+        $files = glob(base_path('app/Actions').'/*.php');
+
+        foreach ($files as $file) {
+            $content = file_get_contents($file);
+
+            if (mb_strpos($content, 'execute(') === false) {
                 continue;
             }
 
-            $files = glob($path.'/*.php');
-
-            foreach ($files as $file) {
-                require_once $file;
-            }
+            require_once $file;
         }
     }
 }

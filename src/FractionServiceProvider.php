@@ -12,9 +12,9 @@ class FractionServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton('fraction', fn (Application $app) => new FractionManager($app));
+        $this->registerBindins();
 
-        $this->mergeConfigFrom(__DIR__.'/../config.php', 'fraction');
+        $this->registerCommands();
     }
 
     public function boot(): void
@@ -24,5 +24,21 @@ class FractionServiceProvider extends ServiceProvider
         ]);
 
         Fraction::boot();
+    }
+
+    private function registerBindins(): void
+    {
+        $this->app->singleton('fraction', fn (Application $app) => new FractionManager($app));
+    }
+
+    private function registerCommands(): void
+    {
+        if (! $this->app->runningInConsole()) {
+            return;
+        }
+
+        $this->commands([
+            Console\MakeActionCommand::class,
+        ]);
     }
 }
