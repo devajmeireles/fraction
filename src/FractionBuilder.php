@@ -2,7 +2,9 @@
 
 namespace Fraction;
 
+use Closure;
 use Fraction\Facades\Fraction;
+use Illuminate\Foundation\Application;
 use RuntimeException;
 
 class FractionBuilder
@@ -11,8 +13,15 @@ class FractionBuilder
 
     public array $after = [];
 
-    public function __construct(public string $action, public \Closure $closure)
-    {
+    public bool $queued = false;
+
+    public bool $deferred = false;
+
+    public function __construct(
+        public Application $application,
+        public string $action,
+        public Closure $closure
+    ) {
         // ...
     }
 
@@ -38,6 +47,20 @@ class FractionBuilder
         return $this;
     }
 
+    public function queued(bool $queued = true): self
+    {
+        $this->queued = $queued;
+
+        return $this;
+    }
+
+    public function deferred(bool $deferred = true): self
+    {
+        $this->deferred = $deferred;
+
+        return $this;
+    }
+
     public function __invoke(...$args): mixed
     {
         foreach ($this->before as $before) {
@@ -46,12 +69,22 @@ class FractionBuilder
             $before();
         }
 
-        $result = app()->wrap($this->closure)(...$args);
+        $closure = $this->application->wrap($this->closure);
 
-        foreach ($this->after as $after) {
-            $after = Fraction::get($after);
+        $result = null;
 
-            $after();
+        if ($this->queued) {
+            dispatch(fn () => $closure(...$args));
+        } elseif ($this->deferred) {
+            \Illuminate\Support\defer(fn () => $closure(...$args));
+        } else {
+            $result = $closure(...$args);
+
+            foreach ($this->after as $after) {
+                $after = Fraction::get($after);
+
+                $after();
+            }
         }
 
         return $result;

@@ -4,6 +4,7 @@ namespace Fraction;
 
 use Closure;
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Arr;
 use RuntimeException;
 
 class FractionManager
@@ -25,7 +26,7 @@ class FractionManager
             throw new RuntimeException("Action '$action' is already registered.");
         }
 
-        $builder = new FractionBuilder($action, $closure);
+        $builder = new FractionBuilder($this->application, $action, $closure);
 
         $this->fractions[$action] = $builder;
 
@@ -39,9 +40,7 @@ class FractionManager
 
     public function mount(string|array $path): self
     {
-        if (is_string($path)) {
-            $path = [$path];
-        }
+        $path = Arr::wrap($path);
 
         $this->path = array_merge($this->path, $path);
 
