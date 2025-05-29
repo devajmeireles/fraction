@@ -12,7 +12,7 @@ class FractionServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->bind('fraction', fn (Application $app) => new FractionManager($app));
+        $this->app->singleton('fraction', fn (Application $app) => new FractionManager($app));
     }
 
     public function boot(): void

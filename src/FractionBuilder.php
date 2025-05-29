@@ -1,10 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fraction;
 
 use Closure;
 use Fraction\Facades\Fraction;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
+use InvalidArgumentException;
+use ReflectionException;
+use ReflectionFunction;
 use RuntimeException;
 
 class FractionBuilder
@@ -23,6 +29,75 @@ class FractionBuilder
         public Closure $closure
     ) {
         // ...
+    }
+
+    public function __invoke(...$args): mixed
+    {
+        foreach ($this->before as $before) {
+            $before = Fraction::get($before);
+
+            $before();
+        }
+
+        $result = null;
+
+        /** @throws ReflectionException|BindingResolutionException|InvalidArgumentException */
+        $call = function () use ($args): mixed {
+            $reflection = new ReflectionFunction($this->closure);
+
+            $parameters = $reflection->getParameters();
+            $resolved   = [];
+
+            foreach ($parameters as $index => $parameter) {
+                if (array_key_exists($index, $args)) {
+                    $resolved[] = $args[$index];
+
+                    continue;
+                }
+
+                foreach ($parameter->getAttributes() as $attribute) {
+                    if (! str_contains($attribute->getName(), 'Illuminate\Container\Attributes')) {
+                        continue;
+                    }
+
+                    $instance = $attribute->newInstance();
+
+                    if (! method_exists($instance, 'resolve')) {
+                        continue;
+                    }
+
+                    $resolved[] = $instance->resolve($instance, $this->application);
+                }
+
+                $type = $parameter->getType();
+
+                if ($type && ! $type->isBuiltin()) {
+                    $resolved[] = $this->application->make($type->getName());
+                } elseif ($parameter->isDefaultValueAvailable()) {
+                    $resolved[] = $parameter->getDefaultValue();
+                } else {
+                    throw new InvalidArgumentException("Cannot resolve parameter \${$parameter->getName()} in [{$this->action}]");
+                }
+            }
+
+            return call_user_func_array($this->closure, $resolved);
+        };
+
+        if ($this->queued) {
+            dispatch($call);
+        } elseif ($this->deferred) {
+            \Illuminate\Support\defer($call);
+        } else {
+            $result = $call();
+
+            foreach ($this->after as $after) {
+                $after = Fraction::get($after);
+
+                $after();
+            }
+        }
+
+        return $result;
     }
 
     public function before(string $action): self
@@ -59,34 +134,5 @@ class FractionBuilder
         $this->deferred = $deferred;
 
         return $this;
-    }
-
-    public function __invoke(...$args): mixed
-    {
-        foreach ($this->before as $before) {
-            $before = Fraction::get($before);
-
-            $before();
-        }
-
-        $closure = $this->application->wrap($this->closure);
-
-        $result = null;
-
-        if ($this->queued) {
-            dispatch(fn () => $closure(...$args));
-        } elseif ($this->deferred) {
-            \Illuminate\Support\defer(fn () => $closure(...$args));
-        } else {
-            $result = $closure(...$args);
-
-            foreach ($this->after as $after) {
-                $after = Fraction::get($after);
-
-                $after();
-            }
-        }
-
-        return $result;
     }
 }

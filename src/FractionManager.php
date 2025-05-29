@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Fraction;
 
 use Closure;
@@ -26,6 +28,8 @@ class FractionManager
             throw new RuntimeException("Action '$action' is already registered.");
         }
 
+        // $closure = $this->application->wrap($closure);
+
         $builder = new FractionBuilder($this->application, $action, $closure);
 
         $this->fractions[$action] = $builder;
@@ -47,8 +51,18 @@ class FractionManager
         return $this;
     }
 
-    public function boot()
+    public function boot(): void
     {
-        // ...
+        foreach ($this->path as $path) {
+            if (! is_dir($path)) {
+                throw new RuntimeException("Path '$path' is not a directory.");
+            }
+
+            $files = glob($path.'/*.php');
+
+            foreach ($files as $file) {
+                require_once $file;
+            }
+        }
     }
 }
