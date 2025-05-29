@@ -8,8 +8,7 @@ use Fraction\Concerns\ShareableInterpreterConstructor;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Support\DependencyResolver;
 use Illuminate\Container\Container;
-
-use function Illuminate\Support\defer;
+use RuntimeException;
 
 final class AsDefer implements ShouldInterpreter
 {
@@ -17,12 +16,16 @@ final class AsDefer implements ShouldInterpreter
 
     public function handle(Container $container): mixed
     {
+        if (! function_exists('Illuminate\Support\defer')) {
+            throw new RuntimeException('Deferred actions should only be used in in Laravel 12 or later.');
+        }
+
         $dependencies = $container->make(DependencyResolver::class, [
             'action'      => $this->action,
             'application' => $container,
         ]);
 
-        defer(fn () => $dependencies->resolve($this->closure, $this->arguments));
+        \Illuminate\Support\defer(fn () => $dependencies->resolve($this->closure, $this->arguments));
 
         return true;
     }
