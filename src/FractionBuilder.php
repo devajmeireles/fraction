@@ -47,17 +47,19 @@ final class FractionBuilder
             return true;
         }
 
-        $call = $this->application->make(DependencyResolver::class, [
+        $dependencies = $this->application->make(DependencyResolver::class, [
             'action' => $this->action,
         ]);
 
+        $resolve = $dependencies->resolve(...);
+
         if ($this->deferred) {
-            defer(fn () => $call->resolve($this->closure, $arguments));
+            defer(fn () => $resolve($this->closure, $arguments));
 
             return true;
         }
 
-        $result = $call->resolve($this->closure, $arguments);
+        $result = $resolve($this->closure, $arguments);
 
         foreach ($this->after as $after) {
             $after = Fraction::get($after);
