@@ -1,6 +1,7 @@
 {
   "preset": "laravel",
   "notPath": [
+    "config.php",
     "tests/TestCase.php"
   ],
   "rules": {

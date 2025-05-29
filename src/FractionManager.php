@@ -15,13 +15,11 @@ class FractionManager
 {
     public array $fractions = [];
 
-    public string|array $path;
+    public string|array $path = [];
 
     public function __construct(public Application $application)
     {
-        $this->path = [
-            base_path('app/Actions'),
-        ];
+        $this->path = config('fraction.paths');
     }
 
     public function register(string|UnitEnum $action, Closure $closure): FractionBuilder
@@ -59,7 +57,7 @@ class FractionManager
     {
         foreach ($this->path as $path) {
             if (! is_dir($path)) {
-                throw new RuntimeException("Path '$path' is not a directory.");
+                continue;
             }
 
             $files = glob($path.'/*.php');
