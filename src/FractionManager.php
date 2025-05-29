@@ -11,7 +11,7 @@ use Fraction\Support\FractionName;
 use Illuminate\Foundation\Application;
 use UnitEnum;
 
-class FractionManager
+final class FractionManager
 {
     public array $fractions = [];
 

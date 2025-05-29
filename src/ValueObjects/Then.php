@@ -8,7 +8,7 @@ use Fraction\Exceptions\PreventLoop;
 use Fraction\Support\FractionName;
 use UnitEnum;
 
-class Then
+final class Then
 {
     /**
      * @throws PreventLoop
