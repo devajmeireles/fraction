@@ -1,17 +1,16 @@
 includes:
-    - vendor/larastan/larastan/extension.neon
-    - vendor/nesbot/carbon/extension.neon
+    - ./vendor/larastan/larastan/extension.neon
 
 parameters:
 
     paths:
-        - app/
+        - src/
 
-    # Level 10 is the highest level
     level: 5
 
-#    ignoreErrors:
-#        - '#PHPDoc tag @var#'
-#
-#    excludePaths:
-#        - ./*/*/FileToBeExcluded.php
+    treatPhpDocTypesAsCertain: false
+
+    editorUrl: 'phpstorm://open?file=%%file%%&line=%%line%%'
+
+    excludePaths:
+        - *Test.php

@@ -11,6 +11,8 @@ use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
 use ReflectionException;
 use ReflectionFunction;
+use ReflectionNamedType;
+use ReflectionParameter;
 
 /** @internal */
 final readonly class DependencyResolver
@@ -59,6 +61,7 @@ final readonly class DependencyResolver
                 $resolved[] = $instance->resolve($instance, $this->application);
             }
 
+            /** @var ReflectionParameter|ReflectionNamedType $type */
             $type = $parameter->getType();
 
             if ($type && ! $type->isBuiltin()) {

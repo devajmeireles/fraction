@@ -19,10 +19,6 @@ class FractionServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__.'/../config.php' => config_path('fraction.php'),
-        ]);
-
         Fraction::boot();
     }
 

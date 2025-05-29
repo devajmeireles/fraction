@@ -13,7 +13,7 @@ final class AsDefer implements ShouldInterpreter
 {
     use ShareableInterpreter;
 
-    public function handle(Container $container): mixed
+    public function handle(Container $container): true
     {
         if (! function_exists('Illuminate\Support\defer')) {
             throw new RuntimeException('Deferred actions should only be used in in Laravel 12 or later.');
