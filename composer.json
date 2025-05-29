@@ -13,6 +13,47 @@
             "email": "alvaro.meireles@live.com"
         }
     ],
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^11.0"
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.0",
+        "pestphp/pest-plugin-type-coverage": "^3.0",
+        "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Fraction\\FractionServiceProvider"
+            ],
+            "aliases": {
+                "Debugbar": "Fraction\\Facades\\Fraction"
+            }
+        }
+    },
+    "scripts": {
+        "test": [
+            "./vendor/bin/pest --parallel"
+        ],
+        "format": [
+            "./vendor/bin/pint"
+        ],
+        "analyse": [
+            "./vendor/bin/phpstan analyse --memory-limit=2G"
+        ],
+        "ci": [
+            "./vendor/bin/pint --test",
+            "./vendor/bin/phpstan analyse --memory-limit=2G",
+            "./vendor/bin/pest --parallel"
+        ]
+    },
     "minimum-stability": "stable",
-    "require": {}
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
 }
