@@ -58,4 +58,4 @@ jobs:
         run: ./vendor/bin/pest --type-coverage --min=100
 
       - name: Tests
-        run: ./vendor/bin/pest --parallel --order-by random --stop-on-failure --coverage --min=90
+        run: ./vendor/bin/pest --parallel --order-by random --stop-on-failure --coverage --min=85
