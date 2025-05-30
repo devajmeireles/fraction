@@ -14,9 +14,7 @@ final class AsDefault implements ShouldInterpreter
 {
     use ShareableInterpreter;
 
-    /**
-     * @throws ReflectionException|BindingResolutionException
-     */
+    /** @throws ReflectionException|BindingResolutionException */
     public function handle(Container $container): mixed
     {
         $result = $this->dependencies($container)->resolve($this->closure, $this->arguments);
