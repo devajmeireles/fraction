@@ -27,6 +27,11 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
 
+test('should not use dangerous functions in PHP files')
+    ->expect(['dd', 'dump', 'exit', 'ray', 'var_dump'])
+    ->not
+    ->toBeUsed();
+
 arch()
     ->expect(ShareableInterpreter::class)
     ->toOnlyBeUsedIn([
