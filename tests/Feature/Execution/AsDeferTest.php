@@ -69,7 +69,7 @@ test('call then sequentially', function () {
         ->toBeTrue()
         ->and(__exists('four'))
         ->toBeTrue();
-})->skip('Implement when DeferUsing is ready');
+});
 
 test('ensure then order', function () {
     $builder = execute('one', function () {

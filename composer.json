@@ -1,5 +1,6 @@
 {
     "name": "fraction/fraction",
+    "description": "A small Laravel package that simplifies your experience with the Action Pattern.",
     "type": "library",
     "license": "MIT",
     "autoload": {
