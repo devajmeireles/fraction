@@ -72,7 +72,7 @@ test('not queue', function () {
         return 1;
     });
 
-    expect($builder->queued)->toBeNull();
+    expect($builder->toArray()['queued'])->toBeNull();
 });
 
 test('not deferred', function () {
@@ -80,7 +80,7 @@ test('not deferred', function () {
         return 1;
     });
 
-    expect($builder->deferred)->toBeNull();
+    expect($builder->toArray()['deferred'])->toBeNull();
 });
 
 test('call then', function () {
@@ -159,19 +159,21 @@ test('ensure then order', function () {
         ->then('tree')
         ->then('four');
 
-    expect($builder->then)
+    $array = $builder->toArray();
+
+    expect($array['then'])
         ->toHaveCount(3)
-        ->and($builder->then[0])
+        ->and($array['then'][0])
         ->toBeInstanceOf(Then::class)
-        ->and($builder->then[0]->then)
+        ->and($array['then'][0]->then)
         ->toBe('two')
-        ->and($builder->then[1])
+        ->and($array['then'][1])
         ->toBeInstanceOf(Then::class)
-        ->and($builder->then[1]->then)
+        ->and($array['then'][1]->then)
         ->toBe('tree')
-        ->and($builder->then[2])
+        ->and($array['then'][2])
         ->toBeInstanceOf(Then::class)
-        ->and($builder->then[2]->then)
+        ->and($array['then'][2]->then)
         ->toBe('four');
 });
 

@@ -26,7 +26,7 @@ test('not defer', function () {
         return 1;
     })->deferred();
 
-    expect($builder->queued)->toBeNull();
+    expect($builder->toArray()['queued'])->toBeNull();
 });
 
 test('call then', function () {

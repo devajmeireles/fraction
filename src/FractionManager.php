@@ -13,7 +13,7 @@ use UnitEnum;
 
 final class FractionManager
 {
-    public array $fractions = [];
+    private array $fractions = [];
 
     public function __construct(public Application $application)
     {

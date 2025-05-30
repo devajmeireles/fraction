@@ -15,18 +15,19 @@ use Fraction\Interpreters\AsDefer;
 use Fraction\Interpreters\AsQueue;
 use Fraction\ValueObjects\Then;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
 use UnitEnum;
 
-final class FractionBuilder
+final class FractionBuilder implements Arrayable
 {
-    public array $then = [];
+    private array $then = [];
 
-    public ?QueueUsing $queued = null;
+    private ?QueueUsing $queued = null;
 
-    public ?DeferUsing $deferred = null;
+    private ?DeferUsing $deferred = null;
 
     public function __construct(
         public Application $application,
@@ -59,7 +60,7 @@ final class FractionBuilder
 
         $instance = $interpreter->then($this->then);
 
-        if ($interpreter instanceof Configurable) {
+        if ($interpreter instanceof Configurable && ($this->queued || $this->deferred)) {
             $interpreter->configure($this->queued?->toArray() ?? $this->deferred->toArray());
         }
 
@@ -96,5 +97,16 @@ final class FractionBuilder
         $this->deferred = new DeferUsing($name, $always);
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'action'   => $this->action,
+            'closure'  => $this->closure,
+            'then'     => $this->then,
+            'queued'   => $this->queued,
+            'deferred' => $this->deferred,
+        ];
     }
 }
