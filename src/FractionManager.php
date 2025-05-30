@@ -30,7 +30,7 @@ final class FractionManager
         $action = FractionName::format($action);
 
         if (isset($this->fractions[$action])) {
-            throw new UnallowedActionDuplication($action);
+            throw new UnallowedActionDuplication($original);
         }
 
         $builder = new FractionBuilder($this->application, $original, $closure);

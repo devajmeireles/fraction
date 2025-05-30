@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Fraction\Exceptions\ActionNotRegistered;
+use Fraction\Exceptions\UnallowedActionDuplication;
 use Fraction\ValueObjects\Then;
 use Illuminate\Cache\Repository;
 use Illuminate\Container\Attributes\Cache;
@@ -171,3 +173,27 @@ test('ensure then order', function () {
         ->and($builder->then[2]->then)
         ->toBe('four');
 });
+
+test('cannot use a non-existent action', function () {
+    execute('foo', function () {
+        return 'foo';
+    });
+
+    $test = run('bar');
+
+    expect($test)->toBe('foo');
+})->throws(ActionNotRegistered::class, 'The action [bar] is not registered.');
+
+test('cannot register twice', function () {
+    execute('foo', function () {
+        return 'foo';
+    });
+
+    execute('foo', function () {
+        return 'foo';
+    });
+
+    $test = run('foo');
+
+    expect($test)->toBe('foo');
+})->throws(UnallowedActionDuplication::class, 'The action [foo] is already registered.');

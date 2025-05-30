@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 
+/** @codeCoverageIgnore */
 #[AsCommand(name: 'make:action')]
 class MakeActionCommand extends GeneratorCommand
 {
