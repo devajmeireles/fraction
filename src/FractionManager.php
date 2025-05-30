@@ -54,16 +54,35 @@ final class FractionManager
 
     public function boot(): void
     {
-        $files = glob(config('fraction.path').'/*.php');
+        $cached = [];
 
-        foreach ($files as $file) {
-            $content = file_get_contents($file);
+        if ($this->application->isProduction() && file_exists($path = base_path('bootstrap/cache/actions.php'))) {
+            $files = require $path;
 
-            if (mb_strpos($content, 'namespace') !== false || mb_strpos($content, 'execute') === false) {
-                continue;
+            foreach ($files as $file) {
+                require_once $file;
+            }
+        } else {
+            $files = glob(config('fraction.path').'/*.php');
+
+            foreach ($files as $file) {
+                $content = file_get_contents($file);
+
+                if (mb_strpos($content, 'namespace') !== false || mb_strpos($content, 'execute') === false) {
+                    continue;
+                }
+
+                $cached[] = $file;
+
+                require_once $file;
             }
 
-            require_once $file;
+            if ($cached !== []) {
+                file_put_contents(
+                    base_path('bootstrap/cache/actions.php'),
+                    '<?php return '.var_export($cached, true).';'
+                );
+            }
         }
     }
 }
