@@ -97,6 +97,25 @@ test('call then', function () {
         ->toBeTrue();
 });
 
+test('call then sharing data', function () {
+    CacheFacade::put('foo', 'foo-bar-baz-bah', 10);
+
+    execute('testing', function (#[Cache] Repository $cache) {
+        return $cache->get('foo');
+    })->then('two');
+
+    execute('two', function (#[Cache] Repository $cache) {
+        __output($cache->get('foo'));
+    });
+
+    $test = run('testing');
+
+    expect($test)
+        ->toBe('foo-bar-baz-bah')
+        ->and(__exists('foo-bar-baz-bah'))
+        ->toBeTrue();
+});
+
 test('call then sequentially', function () {
     execute('one', function () {
         return 1;
