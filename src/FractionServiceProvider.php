@@ -30,7 +30,7 @@ class FractionServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/../config.php' => config_path('fraction.php'),
-        ]);
+        ], 'fraction-config');
 
         $this->optimizes(Console\ActionOptimizeCommand::class, Console\ActionOptimizeCommand::class, 'actions');
 
