@@ -25,7 +25,7 @@ class MakeActionCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create a new fraction file.';
+    protected $description = 'Create a new action file.';
 
     /**
      * The type of class being generated.
@@ -36,7 +36,7 @@ class MakeActionCommand extends GeneratorCommand
 
     protected function getStub(): string
     {
-        return __DIR__.'/../stubs/fraction.stub';
+        return __DIR__.'/../stubs/action.stub';
     }
 
     // The reason why publishing this method is to ensure the

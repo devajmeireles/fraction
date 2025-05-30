@@ -7,21 +7,21 @@ namespace Fraction\Console;
 use Illuminate\Console\Command;
 
 /** @codeCoverageIgnore */
-class OptimizeActionsCommand extends Command
+class ActionOptimizeCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'optimize:actions';
+    protected $name = 'action:optimize';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Optimize the action files.';
+    protected $description = 'Optimize the cached action files.';
 
     /**
      * Execute the console command.

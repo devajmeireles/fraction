@@ -22,7 +22,7 @@ class FractionServiceProvider extends ServiceProvider
 
         $this->commands([
             Console\MakeActionCommand::class,
-            Console\OptimizeActionsCommand::class,
+            Console\ActionOptimizeCommand::class,
         ]);
     }
 
@@ -32,7 +32,7 @@ class FractionServiceProvider extends ServiceProvider
             __DIR__.'/../config.php' => config_path('fraction.php'),
         ]);
 
-        $this->optimizes(Console\OptimizeActionsCommand::class, Console\OptimizeActionsCommand::class, 'actions');
+        $this->optimizes(Console\ActionOptimizeCommand::class, Console\ActionOptimizeCommand::class, 'actions');
 
         Fraction::boot();
     }

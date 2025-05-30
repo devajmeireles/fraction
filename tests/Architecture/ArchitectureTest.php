@@ -101,7 +101,7 @@ arch()
     ->toHaveMethod('handle');
 
 test('stub is valid', function () {
-    $content = file_get_contents(__DIR__.'/../../src/stubs/fraction.stub');
+    $content = file_get_contents(__DIR__.'/../../src/stubs/action.stub');
 
     $original = <<<'TXT'
     <?php
