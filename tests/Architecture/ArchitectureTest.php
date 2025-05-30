@@ -161,6 +161,4 @@ arch()
     ->toHaveMethods([
         'register',
         'boot',
-        'registerBindins',
-        'registerCommands',
     ]);

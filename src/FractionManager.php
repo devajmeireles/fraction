@@ -54,7 +54,7 @@ final class FractionManager
 
     public function boot(): void
     {
-        $files = glob(base_path('app/Actions').'/*.php');
+        $files = glob(config('fraction.path').'/*.php');
 
         foreach ($files as $file) {
             $content = file_get_contents($file);

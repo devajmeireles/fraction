@@ -38,10 +38,17 @@ class MakeActionCommand extends GeneratorCommand
         return __DIR__.'/../stubs/fraction.stub';
     }
 
-    // TODO docs
+    // The reason why publishing this method is to ensure the
+    // action will be created in the correct path fraction.path
     protected function getPath($name): string
     {
-        $this->files->ensureDirectoryExists($path = $this->laravel['path'].'/Actions');
+        $path = config('fraction.path');
+
+        if (empty($path)) {
+            $path = $this->laravel['path'].'/Actions';
+        }
+
+        $this->files->ensureDirectoryExists($path);
 
         $name = Str::of($name)
             ->afterLast('App\\')
@@ -50,7 +57,8 @@ class MakeActionCommand extends GeneratorCommand
         return $path.'/'.str_replace('\\', '/', $name).'.php';
     }
 
-    // TODO docs why?
+    // The reason why publishing this method is to ensure override the {{ name }}
+    // placeholder in the stub file with the formatted name of the action
     protected function buildClass($name): string
     {
         $stub = $this->files->get($this->getStub());
