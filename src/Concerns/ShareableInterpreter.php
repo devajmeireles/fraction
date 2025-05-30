@@ -11,11 +11,12 @@ use Laravel\SerializableClosure\SerializableClosure;
 
 trait ShareableInterpreter
 {
+    public array $then = [];
+
     public function __construct(
         public string $action,
         public array $arguments,
         public SerializableClosure $closure,
-        public array $then = [],
     ) {
         // ...
     }

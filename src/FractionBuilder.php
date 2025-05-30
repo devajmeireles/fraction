@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Fraction;
 
 use Closure;
+use Fraction\Configurable\DeferUsing;
+use Fraction\Configurable\QueueUsing;
+use Fraction\Contracts\Configurable;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Interpreters\AsDefault;
 use Fraction\Interpreters\AsDefer;
@@ -14,15 +17,16 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
+use RuntimeException;
 use UnitEnum;
 
 final class FractionBuilder
 {
     public array $then = [];
 
-    public bool $queued = false;
+    public ?QueueUsing $queued = null;
 
-    public bool $deferred = false;
+    public ?DeferUsing $deferred = null;
 
     public function __construct(
         public Application $application,
@@ -35,10 +39,14 @@ final class FractionBuilder
     /** @throws BindingResolutionException|InvalidArgumentException */
     public function __invoke(...$arguments): mixed
     {
+        if ($this->queued !== null && $this->deferred !== null) {
+            throw new RuntimeException('You cannot use both queued and deferred at the same time.');
+        }
+
         $interpret = match (true) {
-            $this->queued   => AsQueue::class,
-            $this->deferred => AsDefer::class,
-            default         => AsDefault::class,
+            $this->queued instanceof QueueUsing   => AsQueue::class,
+            $this->deferred instanceof DeferUsing => AsDefer::class,
+            default                               => AsDefault::class,
         };
 
         /** @var ShouldInterpreter $interpreter */
@@ -48,7 +56,13 @@ final class FractionBuilder
             'closure'   => new SerializableClosure($this->closure),
         ]);
 
-        $result = $interpreter->then($this->then)->handle($this->application);
+        $instance = $interpreter->then($this->then);
+
+        if ($interpreter instanceof Configurable) {
+            $interpreter->configure($this->queued?->toArray() ?? $this->deferred->toArray());
+        }
+
+        $result = $instance->handle($this->application);
 
         if ($this->queued || $this->deferred) {
             return true;
@@ -64,16 +78,21 @@ final class FractionBuilder
         return $this;
     }
 
-    public function queued(bool $queued = true): self
-    {
-        $this->queued = $queued;
+    public function queued(
+        mixed $delay = null,
+        ?string $queue = null,
+        ?string $connection = null,
+    ): self {
+        $this->queued = new QueueUsing($delay, $queue, $connection);
 
         return $this;
     }
 
-    public function deferred(bool $deferred = true): self
-    {
-        $this->deferred = $deferred;
+    public function deferred(
+        bool $always = false,
+        ?string $name = null,
+    ): self {
+        $this->deferred = new DeferUsing($name, $always);
 
         return $this;
     }

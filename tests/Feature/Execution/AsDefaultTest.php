@@ -197,3 +197,7 @@ test('cannot register twice', function () {
 
     expect($test)->toBe('foo');
 })->throws(UnallowedActionDuplication::class, 'The action [foo] is already registered.');
+
+test('cannot set queued and deferred at same time', function () {
+    //
+});
