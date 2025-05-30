@@ -8,7 +8,6 @@ use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Configurable\DeferUsing;
 use Fraction\Contracts\Configurable;
 use Fraction\Contracts\ShouldInterpreter;
-use Fraction\Exceptions\RequiresLaravelTwelve;
 use Illuminate\Container\Container;
 
 final class AsDefer implements Configurable, ShouldInterpreter
@@ -17,13 +16,8 @@ final class AsDefer implements Configurable, ShouldInterpreter
 
     public DeferUsing $defer;
 
-    /** @throws RequiresLaravelTwelve */
     public function handle(Container $container): true
     {
-        if (! function_exists('Illuminate\Support\defer')) {
-            throw new RequiresLaravelTwelve();
-        }
-
         $dependencies = $this->dependencies($container);
 
         \Illuminate\Support\defer(

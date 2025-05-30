@@ -8,7 +8,6 @@ use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Exceptions\ActionNotRegistered;
 use Fraction\Exceptions\DependencyUnresolvable;
 use Fraction\Exceptions\PreventLoop;
-use Fraction\Exceptions\RequiresLaravelTwelve;
 use Fraction\Exceptions\UnallowedActionDuplication;
 use Fraction\Facades\Fraction;
 use Fraction\FractionBuilder;
@@ -67,7 +66,6 @@ arch()
     ->expect([
         PreventLoop::class,
         ActionNotRegistered::class,
-        RequiresLaravelTwelve::class,
         DependencyUnresolvable::class,
         UnallowedActionDuplication::class,
     ])
