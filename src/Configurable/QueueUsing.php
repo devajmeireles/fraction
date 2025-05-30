@@ -16,6 +16,7 @@ final readonly class QueueUsing implements Arrayable
         //
     }
 
+    /** {@inheritDoc} */
     public function toArray(): array
     {
         return [

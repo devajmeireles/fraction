@@ -21,6 +21,9 @@ trait ShareableInterpreter
         // ...
     }
 
+    /**
+     * Resolve the dependencies for the action.
+     */
     final public function dependencies(Container $container): DependencyResolver
     {
         return $container->make(DependencyResolver::class, [
@@ -29,6 +32,7 @@ trait ShareableInterpreter
         ]);
     }
 
+    /** {@inheritDoc} */
     final public function then(array $then): self
     {
         $this->then = $then;
@@ -36,6 +40,9 @@ trait ShareableInterpreter
         return $this;
     }
 
+    /**
+     * Run the hooks after the action is handled.
+     */
     final public function hooks(): void
     {
         if ($this->then === []) {

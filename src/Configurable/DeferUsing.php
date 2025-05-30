@@ -15,6 +15,7 @@ final readonly class DeferUsing implements Arrayable
         //
     }
 
+    /** {@inheritDoc} */
     public function toArray(): array
     {
         return [

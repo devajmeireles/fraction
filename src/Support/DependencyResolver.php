@@ -25,7 +25,7 @@ final readonly class DependencyResolver
     }
 
     /**
-     * //
+     * Resolve the dependencies of a closure or serializable closure.
      *
      * @throws ReflectionException|BindingResolutionException|DependencyUnresolvable
      */

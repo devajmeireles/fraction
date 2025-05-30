@@ -6,5 +6,8 @@ namespace Fraction\Contracts;
 
 interface Configurable
 {
+    /**
+     * Configure the interpreter with the given data.
+     */
     public function configure(array $data): void;
 }

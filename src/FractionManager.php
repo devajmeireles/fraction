@@ -21,6 +21,8 @@ final class FractionManager
     }
 
     /**
+     * Register a new action.
+     *
      * @throws UnallowedActionDuplication
      */
     public function register(string|UnitEnum $action, Closure $closure): FractionBuilder
@@ -41,6 +43,8 @@ final class FractionManager
     }
 
     /**
+     * Get the action by its name.
+     *
      * @throws ActionNotRegistered
      */
     public function get(string|UnitEnum $action): mixed
@@ -52,6 +56,9 @@ final class FractionManager
         return $this->fractions[$action] ?? throw new ActionNotRegistered($original);
     }
 
+    /**
+     * Bootstrap the actions.
+     */
     public function boot(): void
     {
         $cached = [];

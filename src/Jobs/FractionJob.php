@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Fraction\Jobs;
 
+use Fraction\Exceptions\DependencyUnresolvable;
 use Fraction\Support\DependencyResolver;
 use Fraction\ValueObjects\Then;
 use Illuminate\Container\Container;
@@ -26,7 +27,11 @@ final class FractionJob implements ShouldQueue
         // ...
     }
 
-    /** @throws ReflectionException|BindingResolutionException */
+    /**
+     * Handle the job.
+     *
+     * @throws ReflectionException|BindingResolutionException|DependencyUnresolvable
+     */
     public function handle(Container $application): void
     {
         $application->make(DependencyResolver::class, [

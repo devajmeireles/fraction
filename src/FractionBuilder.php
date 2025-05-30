@@ -23,10 +23,21 @@ use UnitEnum;
 
 final class FractionBuilder implements Arrayable
 {
+    /**
+     * The array of "then" hooks.
+     *
+     * @var array<int, string>
+     */
     private array $then = [];
 
+    /**
+     * Configuration for queueing the action.
+     */
     private ?QueueUsing $queued = null;
 
+    /**
+     * Configuration for deferring the action.
+     */
     private ?DeferUsing $deferred = null;
 
     public function __construct(
@@ -37,7 +48,10 @@ final class FractionBuilder implements Arrayable
         // ...
     }
 
-    /** @throws BindingResolutionException|InvalidArgumentException|PreventDeferQueueSameTime
+    /**
+     * Run the action.
+     *
+     * @throws BindingResolutionException|InvalidArgumentException|PreventDeferQueueSameTime
      */
     public function __invoke(...$arguments): mixed
     {
@@ -73,6 +87,9 @@ final class FractionBuilder implements Arrayable
         return $result;
     }
 
+    /**
+     * Register a "then" hook.
+     */
     public function then(string|UnitEnum $action): self
     {
         $this->then[] = new Then($this->action, $action);
@@ -80,6 +97,11 @@ final class FractionBuilder implements Arrayable
         return $this;
     }
 
+    /**
+     * Enable the action to be queued.
+     *
+     * @return $this
+     */
     public function queued(
         mixed $delay = null,
         ?string $queue = null,
@@ -90,6 +112,11 @@ final class FractionBuilder implements Arrayable
         return $this;
     }
 
+    /**
+     * Enable the action to be deferred.
+     *
+     * @return $this
+     */
     public function deferred(
         bool $always = false,
         ?string $name = null,
@@ -99,6 +126,7 @@ final class FractionBuilder implements Arrayable
         return $this;
     }
 
+    /** {@inheritDoc} */
     public function toArray(): array
     {
         return [
