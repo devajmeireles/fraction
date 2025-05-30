@@ -84,6 +84,8 @@ php artisan make:action CreateUser
 Essa ação irá gerar um arquivo em `app/Actions/CreateUser.php` com o seguinte conteúdo:
 
 ```php
+<?php
+
 execute('create user', function () {
     // ...
 });
@@ -94,8 +96,6 @@ Por padrão, o namespace utilizado para criação e leitura de ações é `App\A
 ```bash
 php artisan vendor:publish --tag=fraction-config
 ```
-
-### Default
 
 Para executar uma ação, você pode usar a função `run`:
 

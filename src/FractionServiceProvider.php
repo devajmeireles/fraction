@@ -14,7 +14,7 @@ class FractionServiceProvider extends ServiceProvider
     {
         $this->app->singleton('fraction', fn (Application $app) => new FractionManager($app));
 
-        $this->mergeConfigFrom(__DIR__.'/../config.php', 'fraction');
+        $this->mergeConfigFrom(__DIR__.'/config.php', 'fraction');
 
         if (! $this->app->runningInConsole()) {
             return;
@@ -29,7 +29,7 @@ class FractionServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__.'/../config.php' => config_path('fraction.php'),
+            __DIR__.'/config.php' => config_path('fraction.php'),
         ], 'fraction-config');
 
         $this->optimizes(Console\ActionOptimizeCommand::class, Console\ActionOptimizeCommand::class, 'actions');
