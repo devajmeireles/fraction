@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fraction\Jobs;
 
 use Fraction\Support\DependencyResolver;
+use Fraction\ValueObjects\Then;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,8 +37,9 @@ final class FractionJob implements ShouldQueue
             return;
         }
 
+        /** @var Then $hook */
         foreach ($this->then as $hook) {
-            run($hook, ...$this->arguments);
+            run($hook->then, ...$this->arguments);
         }
     }
 }

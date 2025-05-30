@@ -2,10 +2,112 @@
 
 declare(strict_types=1);
 
-test('run', function () {
-    expect(true)->toBeTrue();
+use Fraction\ValueObjects\Then;
+
+beforeEach(fn () => __delete());
+
+test('basic', function (mixed $data) {
+    execute('testing', function (mixed $data) {
+        return $data;
+    });
+
+    $test = run('testing', $data);
+
+    expect($test)->toBe($data);
+
+})->with([
+    'test',
+    'test2',
+    1,
+    10,
+    [1, 2, 3],
+]);
+
+test('not queue', function () {
+    $builder = execute('testing', function () {
+        return 1;
+    });
+
+    expect($builder->queued)->toBeFalse();
+});
+
+test('not deferred', function () {
+    $builder = execute('testing', function () {
+        return 1;
+    });
+
+    expect($builder->deferred)->toBeFalse();
 });
 
 test('call then', function () {
-    expect(true)->toBeTrue();
+    execute('one', function () {
+        return 1;
+    })->then('two');
+
+    execute('two', function () {
+        __output('two');
+    });
+
+    $test = run('one');
+
+    expect($test)
+        ->toBe(1)
+        ->and(__exists('two'))
+        ->toBeTrue();
+});
+
+test('call then sequentially', function () {
+    execute('one', function () {
+        return 1;
+    })
+        ->then('two')
+        ->then('tree')
+        ->then('four');
+
+    execute('two', function () {
+        __output('two');
+    });
+
+    execute('tree', function () {
+        __output('tree');
+    });
+
+    execute('four', function () {
+        __output('four');
+    });
+
+    $test = run('one');
+
+    expect($test)
+        ->toBe(1)
+        ->and(__exists('two'))
+        ->toBeTrue()
+        ->and(__exists('tree'))
+        ->toBeTrue()
+        ->and(__exists('four'))
+        ->toBeTrue();
+});
+
+test('ensure then order', function () {
+    $builder = execute('one', function () {
+        return 1;
+    })
+        ->then('two')
+        ->then('tree')
+        ->then('four');
+
+    expect($builder->then)
+        ->toHaveCount(3)
+        ->and($builder->then[0])
+        ->toBeInstanceOf(Then::class)
+        ->and($builder->then[0]->then)
+        ->toBe('two')
+        ->and($builder->then[1])
+        ->toBeInstanceOf(Then::class)
+        ->and($builder->then[1]->then)
+        ->toBe('tree')
+        ->and($builder->then[2])
+        ->toBeInstanceOf(Then::class)
+        ->and($builder->then[2]->then)
+        ->toBe('four');
 });
