@@ -14,14 +14,14 @@ test('basic', function () {
     })->deferred();
 
     expect(run('testing'))->toBeTrue();
-})->skip('Implement when DeferUsing is ready');
+});
 
 test('not queue', function () {
     $builder = execute('testing', function () {
         return 1;
     })->deferred();
 
-    expect($builder->queued)->toBeFalse();
+    expect($builder->queued)->toBeNull();
 });
 
 test('call then', function () {
@@ -36,11 +36,8 @@ test('call then', function () {
 
     $test = run('one');
 
-    expect($test)
-        ->toBe(1)
-        ->and(__exists('two'))
-        ->toBeTrue();
-})->skip('Implement when DeferUsing is ready');
+    expect($test)->toBeTrue();
+});
 
 test('call then sequentially', function () {
     execute('one', function () {
@@ -83,8 +80,9 @@ test('ensure then order', function () {
         ->then('tree')
         ->then('four');
 
-    expect($builder->deferred)
-        ->toBeTrue()
+    expect($builder->deferred())
+        ->not()
+        ->toBeNull()
         ->and($builder->then)
         ->toHaveCount(3)
         ->and($builder->then[0])

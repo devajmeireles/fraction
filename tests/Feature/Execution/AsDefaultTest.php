@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Fraction\Exceptions\ActionNotRegistered;
+use Fraction\Exceptions\PreventDeferQueueSameTime;
 use Fraction\Exceptions\UnallowedActionDuplication;
 use Fraction\ValueObjects\Then;
 use Illuminate\Cache\Repository;
@@ -71,7 +72,7 @@ test('not queue', function () {
         return 1;
     });
 
-    expect($builder->queued)->toBeFalse();
+    expect($builder->queued)->toBeNull();
 });
 
 test('not deferred', function () {
@@ -79,7 +80,7 @@ test('not deferred', function () {
         return 1;
     });
 
-    expect($builder->deferred)->toBeFalse();
+    expect($builder->deferred)->toBeNull();
 });
 
 test('call then', function () {
@@ -199,5 +200,10 @@ test('cannot register twice', function () {
 })->throws(UnallowedActionDuplication::class, 'The action [foo] is already registered.');
 
 test('cannot set queued and deferred at same time', function () {
-    //
-});
+    execute('testing', function () {
+        return 'foo';
+    })->queued()
+        ->deferred();
+
+    run('testing');
+})->throws(PreventDeferQueueSameTime::class, 'The action [testing] cannot use defer and queue at the same time.');

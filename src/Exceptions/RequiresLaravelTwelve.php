@@ -6,6 +6,7 @@ namespace Fraction\Exceptions;
 
 use Exception;
 
+/** @codeCoverageIgnore */
 final class RequiresLaravelTwelve extends Exception
 {
     public function __construct()

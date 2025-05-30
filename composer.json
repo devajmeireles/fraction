@@ -44,6 +44,10 @@
         }
     },
     "scripts": {
+        "coverage": [
+            "rm -fr coverage/",
+            "./vendor/bin/pest --parallel --coverage --coverage-html=coverage"
+        ],
         "test": [
             "./vendor/bin/pest --parallel"
         ],
@@ -59,7 +63,7 @@
         "ci": [
             "./vendor/bin/pint --test",
             "./vendor/bin/phpstan analyse --memory-limit=2G",
-            "./vendor/bin/pest --parallel"
+            "./vendor/bin/pest --parallel --coverage --min=90"
         ]
     },
     "minimum-stability": "stable",

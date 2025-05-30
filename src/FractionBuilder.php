@@ -9,6 +9,7 @@ use Fraction\Configurable\DeferUsing;
 use Fraction\Configurable\QueueUsing;
 use Fraction\Contracts\Configurable;
 use Fraction\Contracts\ShouldInterpreter;
+use Fraction\Exceptions\PreventDeferQueueSameTime;
 use Fraction\Interpreters\AsDefault;
 use Fraction\Interpreters\AsDefer;
 use Fraction\Interpreters\AsQueue;
@@ -17,7 +18,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
-use RuntimeException;
 use UnitEnum;
 
 final class FractionBuilder
@@ -36,11 +36,12 @@ final class FractionBuilder
         // ...
     }
 
-    /** @throws BindingResolutionException|InvalidArgumentException */
+    /** @throws BindingResolutionException|InvalidArgumentException|PreventDeferQueueSameTime
+     */
     public function __invoke(...$arguments): mixed
     {
         if ($this->queued !== null && $this->deferred !== null) {
-            throw new RuntimeException('You cannot use both queued and deferred at the same time.');
+            throw new PreventDeferQueueSameTime($this->action);
         }
 
         $interpret = match (true) {
