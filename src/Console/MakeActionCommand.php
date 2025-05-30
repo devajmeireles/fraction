@@ -41,7 +41,7 @@ class MakeActionCommand extends GeneratorCommand
 
     // The reason why publishing this method is to ensure the
     // action will be created in the correct path fraction.path
-    protected function getPath($name): string
+    protected function getPath($name): string // @pest-ignore-type
     {
         $path = config('fraction.path');
 
@@ -60,7 +60,7 @@ class MakeActionCommand extends GeneratorCommand
 
     // The reason why publishing this method is to ensure override the {{ name }}
     // placeholder in the stub file with the formatted name of the action
-    protected function buildClass($name): string
+    protected function buildClass($name): string // @pest-ignore-type
     {
         $stub = $this->files->get($this->getStub());
 

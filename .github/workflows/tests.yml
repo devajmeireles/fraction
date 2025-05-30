@@ -54,5 +54,8 @@ jobs:
       - name: PhpStan
         run: ./vendor/bin/phpstan --configuration="phpstan.neon"
 
+      - name: Type Coverage
+        run: ./vendor/bin/pest --type-coverage --min=100
+
       - name: Tests
         run: ./vendor/bin/pest --parallel --order-by random --stop-on-failure --coverage --min=90
