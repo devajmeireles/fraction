@@ -6,6 +6,8 @@ use Fraction\ValueObjects\Then;
 
 beforeEach(fn () => __delete());
 
+afterAll(fn () => __delete());
+
 test('basic', function () {
     execute('testing', function () {
         return __output();

@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Queue;
 
 beforeEach(fn () => __delete());
 
+afterAll(fn () => __delete());
+
 test('basic', function () {
     Queue::fake();
 
