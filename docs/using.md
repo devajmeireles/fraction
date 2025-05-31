@@ -17,14 +17,14 @@ php artisan vendor:publish --tag=fraction-config
 While you can create actions manually, there is a `make:action` command that can be used to make it easier to create actions via the terminal. The output of the command like this:
 
 ```bash
-php artisan make:action SendWelcomeEmail
+php artisan make:action Emails
 ```
 Will result in an action like this:
 
 ```php
 <?php
 
-// app/Actions/SendWelcomeEmail.php
+// app/Actions/Emails.php
 
 execute('send welcome email', function () {
     // ...
@@ -45,6 +45,8 @@ Optionally, you can pass arguments to the action.
 
 ```php
 <?php
+
+// app/Actions/Emails.php
 
 use App\Models\User;
 use App\Notifications\WelcomeEmailNotification;
@@ -77,8 +79,6 @@ class UserController extends Controller
 
 As you may have noticed above, the user object is returned from the `send welcome email` action. You can return anything from an action. The returned value will be received by executing the `run` function.
 
-> The `queued` e `deferred` only returns `true`.
-
 ## Support UnitEnum
 
 You can also use `UnitEnum` to define your actions through cases, which can be useful to avoid writing errors.
@@ -97,6 +97,8 @@ enum UserActions
 ```php
 <?php
 
+// app/Actions/Emails.php
+
 use App\Enums\UserActions;
 
 execute(UserActions::SendWelcomeEmail, function () {
@@ -108,8 +110,6 @@ You should call the action using the enum as well:
 
 ```php
 <?php
-
-// ...
 
 use App\Enums\UserActions;
 
@@ -123,6 +123,8 @@ Since actions are fully resolved by the Laravel container, you can rely on Larav
 ```php
 <?php
 
+// app/Actions/Emails.php
+
 use Illuminate\Http\Request;
 
 execute('send welcome email', function (Request $request) {
@@ -134,6 +136,8 @@ Obviously, the _Fraction_ can also resolve the new container's attribute:
 
 ```php
 <?php
+
+// app/Actions/Emails.php
 
 use App\Models\User;
 use Illuminate\Container\Attributes\CurrentUser;
@@ -150,6 +154,8 @@ As part of Laravel 11, you can trigger deferred actions simply by using the `def
 ```php
 <?php
 
+// app/Actions/Emails.php
+
 execute('send welcome email', function () {
     // ...
 })->deferred();
@@ -157,7 +163,7 @@ execute('send welcome email', function () {
 
 Behind the scenes, this will register the action as a deferred action, using the `Illuminate\Support\defer` function.
 
-> You can pass parameters to the deferred method to personalize the deferred execution.
+> You can pass parameters to the deferred method to personalize the deferred execution. Additionally, different than the normal actions, `deferred` actions only returns `true` when executed successfully.
 
 ## Queued Actions
 
@@ -166,6 +172,8 @@ You can trigger queued actions simply by using the `queued` method following the
 ```php
 <?php
 
+// app/Actions/Emails.php
+
 execute('send welcome email', function () {
     // ...
 })->queued();
@@ -173,7 +181,7 @@ execute('send welcome email', function () {
 
 Behind the scenes, this will register the action to dispatch the `Fraction\Jobs\FractionJob` job, which will execute the action in the background.
 
-> You can pass parameters to the queued method to personalize the queued execution.
+> You can pass parameters to the queued method to personalize the queued execution. Additionally, different than the normal actions, `queued` actions only returns `true` when executed successfully.
 
 ## Rescued Actions
 
@@ -181,6 +189,8 @@ You can trigger rescued actions simply by using the `rescued` method following t
 
 ```php
 <?php
+
+// app/Actions/Emails.php
 
 execute('send welcome email', function () {
     // ...
@@ -194,7 +204,13 @@ You can also pass a default value to the `rescued` method, which will be returne
 ```php
 <?php
 
+// app/Actions/Emails.php
+
 execute('send welcome email', function () {
     throw new Exception('ops!');
 })->rescued(default: false);
+```
+
+```php
+$result = run('send welcome email'); // false
 ```
