@@ -9,7 +9,5 @@ Since actions are not classes, action files are registered via `required_once`. 
 You should run the following command during deployment:
 
 ```bash
-php artisan action:optimize
+php artisan optimize:clear
 ```
-
-> This command is called automatically through the `php artisan optimize:clear` command.

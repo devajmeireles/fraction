@@ -14,7 +14,7 @@ class ActionOptimizeCommand extends Command
      *
      * @var string
      */
-    protected $name = 'action:optimize';
+    protected $name = 'actions:optimize';
 
     /**
      * The console command description.
@@ -22,6 +22,13 @@ class ActionOptimizeCommand extends Command
      * @var string
      */
     protected $description = 'Optimize the cached action files.';
+
+    /**
+     * Indicates whether the command should be shown in the Artisan command list.
+     *
+     * @var bool
+     */
+    protected $hidden = true;
 
     /**
      * Execute the console command.
