@@ -1,6 +1,6 @@
 {
     "name": "fraction/fraction",
-    "description": "A small Laravel package that simplifies your experience with the Action Pattern.",
+    "description": "New way to interact with the Laravel action patterns.",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -67,7 +67,7 @@
             "./vendor/bin/pest --parallel --coverage --min=85"
         ]
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {
