@@ -21,6 +21,12 @@ execute('create user', function (Request $request) {
 
 execute('send welcome user email', function (Request $request) {
     // ...
+})->then('enable free trial');
+
+// app/Actions/Products.php
+
+execute('enable free trial', function (Request $request) {
+    // ...
 });
 ```
 
