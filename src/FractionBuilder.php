@@ -82,6 +82,7 @@ final class FractionBuilder implements Arrayable
         $instance = $interpreter->then($this->then);
 
         if ($this->queued || $this->deferred || $this->rescued) {
+            // @phpstan-ignore-next-line
             $interpreter->configure($this->queued?->toArray() ?? $this->deferred?->toArray() ?? $this->rescued?->toArray());
         }
 
