@@ -7,6 +7,7 @@ namespace Fraction;
 use Closure;
 use Fraction\Configurable\DeferUsing;
 use Fraction\Configurable\QueueUsing;
+use Fraction\Contracts\Configurable;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Exceptions\PreventDeferQueueSameTime;
 use Fraction\Handlers\AsDefer;
@@ -55,7 +56,7 @@ final class FractionBuilder implements Arrayable
             default                               => AsSync::class,
         };
 
-        /** @var ShouldInterpreter $interpreter */
+        /** @var ShouldInterpreter|Configurable $interpreter */
         $interpreter = $this->application->make($interpret, [
             'action'    => $this->action,
             'arguments' => $arguments,
@@ -106,10 +107,6 @@ final class FractionBuilder implements Arrayable
             $this->rescued,
         ] as $instance) {
             if ($instance !== null) {
-                if (! $instance instanceof Arrayable) {
-                    throw new RuntimeException(sprintf('The instance of [%s] should implement Arrayable', class_basename($instance)));
-                }
-
                 return [true, $instance->toArray()];
             }
         }
