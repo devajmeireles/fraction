@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fraction\Interpreters;
+namespace Fraction\Handlers;
 
 use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Configurable\QueueUsing;

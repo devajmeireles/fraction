@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fraction\Interpreters;
+namespace Fraction\Handlers;
 
 use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Configurable\RescuedUsing;
@@ -10,7 +10,7 @@ use Fraction\Contracts\Configurable;
 use Fraction\Contracts\ShouldInterpreter;
 use Illuminate\Container\Container;
 
-final class AsDefault implements Configurable, ShouldInterpreter
+final class AsSync implements Configurable, ShouldInterpreter
 {
     use ShareableInterpreter;
 

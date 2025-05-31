@@ -9,9 +9,9 @@ use Fraction\Configurable\DeferUsing;
 use Fraction\Configurable\QueueUsing;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Exceptions\PreventDeferQueueSameTime;
-use Fraction\Interpreters\AsDefault;
-use Fraction\Interpreters\AsDefer;
-use Fraction\Interpreters\AsQueue;
+use Fraction\Handlers\AsDefer;
+use Fraction\Handlers\AsQueue;
+use Fraction\Handlers\AsSync;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Application;
@@ -50,7 +50,7 @@ final class FractionBuilder implements Arrayable
         $interpret = match (true) {
             $this->queued instanceof QueueUsing   => AsQueue::class,
             $this->deferred instanceof DeferUsing => AsDefer::class,
-            default                               => AsDefault::class,
+            default                               => AsSync::class,
         };
 
         /** @var ShouldInterpreter $interpreter */

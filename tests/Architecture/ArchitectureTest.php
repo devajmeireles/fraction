@@ -13,9 +13,9 @@ use Fraction\Facades\Fraction;
 use Fraction\FractionBuilder;
 use Fraction\FractionManager;
 use Fraction\FractionServiceProvider;
-use Fraction\Interpreters\AsDefault;
-use Fraction\Interpreters\AsDefer;
-use Fraction\Interpreters\AsQueue;
+use Fraction\Handlers\AsDefer;
+use Fraction\Handlers\AsQueue;
+use Fraction\Handlers\AsSync;
 use Fraction\Jobs\FractionJob;
 use Fraction\Support\DependencyResolver;
 use Fraction\Support\FractionName;
@@ -34,7 +34,7 @@ test('should not use dangerous functions in PHP files')
 arch()
     ->expect(ShareableInterpreter::class)
     ->toOnlyBeUsedIn([
-        AsDefault::class,
+        AsSync::class,
         AsQueue::class,
         AsDefer::class,
     ])
@@ -80,7 +80,7 @@ arch()
 
 arch()
     ->expect([
-        AsDefault::class,
+        AsSync::class,
         AsDefer::class,
         AsQueue::class,
     ])
