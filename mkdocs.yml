@@ -1,0 +1,42 @@
+site_name: Fraction for Laravel
+theme:
+  name: material
+  logo: images/white.png
+  palette:
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+  features:
+    - navigation.footer
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - navigation.instant
+    - toc.integrate
+  icon:
+    repo: fontawesome/brands/git-alt
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/devajmeireles
+
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/devajmeireles
+
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/devajmeireles
+copyright: Copyright 2025 &copy; AJ Meireles
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+nav:
+  - About: index.md
+  - Installation: installation.md
+  - Using: using.md
+  - Action Hooks: hooks.md
