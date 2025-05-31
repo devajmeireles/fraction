@@ -39,5 +39,5 @@ nav:
   - About: index.md
   - Installation: installation.md
   - Using: using.md
-  - Action Hooks: hooks.md
+  - Hooks: hooks.md
   - Deployment: deployment.md
