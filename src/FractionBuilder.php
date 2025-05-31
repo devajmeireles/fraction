@@ -17,6 +17,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
+use RuntimeException;
 use UnitEnum;
 
 final class FractionBuilder implements Arrayable
@@ -60,14 +61,13 @@ final class FractionBuilder implements Arrayable
             'closure'   => new SerializableClosure($this->closure),
         ]);
 
-        $instance = $interpreter->then($this->then);
-
-        if ($this->queued || $this->deferred || $this->rescued) {
-            // @phpstan-ignore-next-line
-            $interpreter->configure($this->queued?->toArray() ?? $this->deferred?->toArray() ?? $this->rescued?->toArray());
+        if ([$has, $configuration] = $this->configuration()) {
+            if ($has) {
+                $interpreter->configure($configuration);
+            }
         }
 
-        $result = $instance->handle($this->application);
+        $result = $interpreter->then($this->then)->handle($this->application);
 
         if ($this->queued || $this->deferred) {
             return true;
@@ -87,5 +87,27 @@ final class FractionBuilder implements Arrayable
             'deferred' => $this->deferred,
             'rescued'  => $this->rescued,
         ];
+    }
+
+    /**
+     * Determines which configurable should be applied.
+     */
+    private function configuration(): array
+    {
+        foreach ([
+            $this->queued,
+            $this->deferred,
+            $this->rescued,
+        ] as $instance) {
+            if ($instance !== null) {
+                if (! $instance instanceof Arrayable) {
+                    throw new RuntimeException(sprintf('The instance of [%s] should implement Arrayable', class_basename($instance)));
+                }
+
+                return [true, $instance->toArray()];
+            }
+        }
+
+        return [false, []];
     }
 }
