@@ -14,7 +14,7 @@ php artisan vendor:publish --tag=fraction-config
 
 ## Creating Actions
 
-While you can create actions manually, there is a make:action command that can be used to make it easier to create actions via the terminal. The output of the command like this:
+While you can create actions manually, there is a `make:action` command that can be used to make it easier to create actions via the terminal. The output of the command like this:
 
 ```bash
 php artisan make:action SendWelcomeEmail
