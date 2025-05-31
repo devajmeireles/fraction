@@ -2,7 +2,7 @@ name: Deploy Documentation
 on:
   push:
     branches:
-      - main
+      - 1.x
     paths:
       - "docs/**"
   workflow_dispatch:
