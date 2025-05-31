@@ -28,6 +28,7 @@ See what the same example would look like with _Fraction for Laravel_:
 
 ```php
 <?php
+
 // app/Actions/CreateUser.php
 
 execute('create user', function (array $data) {

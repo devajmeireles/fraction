@@ -75,6 +75,47 @@ class UserController extends Controller
 }
 ```
 
+Como você deve ter observado acima, o objeto do usuário é retornado da ação `send welcome email`. Você pode retornar qualquer coisa de uma ação. O valor retornado será recebido pela execução da função `run`.
+
+> Ações `queued` e `deferred` retornam apenas `true`.
+
+## Support UnitEnum
+
+Você deve ter observado que os exemplos acima utilizam strings para identificar as ações. No entanto, você também pode usar `UnitEnum` para definir suas ações através de cases, o que pode ser útil para evitar erros de escrita.
+
+```php
+<?php
+
+namespace App\Enums;
+
+enum UserActions
+{
+    case SendWelcomeEmail;
+}
+```
+
+```php
+<?php
+
+use App\Enums\UserActions;
+
+execute(UserActions::SendWelcomeEmail, function () {
+    // ...
+});
+```
+
+Dessa forma, a chamada da ação também deve ser feita utilizando o enum:
+
+```php
+<?php
+
+// ...
+
+use App\Enums\UserActions;
+
+run(UserActions::SendWelcomeEmail);
+```
+
 ## Dependency Injection
 
 Since actions are fully resolved by the Laravel container, you can rely on Laravel's dependency resolution to inject any necessary dependencies into the action. For example, if you want to inject an instance of `Illuminate\Http\Request`:

@@ -40,3 +40,4 @@ nav:
   - Installation: installation.md
   - Using: using.md
   - Action Hooks: hooks.md
+  - Advanced: advanced.md
