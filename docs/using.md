@@ -132,7 +132,7 @@ execute('send welcome email', function (Request $request) {
 });
 ```
 
-Obviously, the _Fraction_ can also resolve the new container's attribute:
+_Fraction_ can also resolve the new container's attribute:
 
 ```php
 <?php
@@ -145,72 +145,4 @@ use Illuminate\Container\Attributes\CurrentUser;
 execute('send welcome email', function (#[CurrentUser] User $user) {
     // ...
 });
-```
-
-## Deferred Actions
-
-As part of Laravel 11, you can trigger deferred actions simply by using the `deferred` method following the action declaration:
-
-```php
-<?php
-
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
-    // ...
-})->deferred();
-```
-
-Behind the scenes, this will register the action as a deferred action, using the `Illuminate\Support\defer` function.
-
-> You can pass parameters to the deferred method to personalize the deferred execution. Additionally, different than the normal actions, `deferred` actions only returns `true` when executed successfully.
-
-## Queued Actions
-
-You can trigger queued actions simply by using the `queued` method following the action declaration:
-
-```php
-<?php
-
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
-    // ...
-})->queued();
-```
-
-Behind the scenes, this will register the action to dispatch the `Fraction\Jobs\FractionJob` job, which will execute the action in the background.
-
-> You can pass parameters to the queued method to personalize the queued execution. Additionally, different than the normal actions, `queued` actions only returns `true` when executed successfully.
-
-## Rescued Actions
-
-You can trigger rescued actions simply by using the `rescued` method following the action declaration:
-
-```php
-<?php
-
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
-    // ...
-})->rescued();
-```
-
-Behind the scenes, this will register the action to execute the function inside the `rescue` Laravel's function, which aims to do not stop the execution of the application in case of an error.
-
-You can also pass a default value to the `rescued` method, which will be returned in case of an error:
-
-```php
-<?php
-
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
-    throw new Exception('ops!');
-})->rescued(default: false);
-```
-
-```php
-$result = run('send welcome email'); // false
 ```

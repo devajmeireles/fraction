@@ -40,6 +40,8 @@ execute('enable free trial', function (Request $request) {
 
 > An action cannot call itself in a hook.
 
+Although the above example uses _sync actions_, you can also use `deferred` or `queued` actions with the hook system.
+
 ## Shared Parameters
 
 As you can see in the example above, the `Illuminate\Http\Request` instance is repeated between both the `create user`, `send welcome email`, and `enable free trial` actions. This happens because all the parameters sent to one action are passed to the others using the hook system.
