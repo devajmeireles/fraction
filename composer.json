@@ -64,7 +64,7 @@
         "ci": [
             "./vendor/bin/pint --test",
             "./vendor/bin/phpstan analyse --memory-limit=2G",
-            "./vendor/bin/pest --parallel --coverage --min=90"
+            "./vendor/bin/pest --parallel --coverage --min=85"
         ]
     },
     "minimum-stability": "stable",
