@@ -18,7 +18,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Foundation\Application;
 use InvalidArgumentException;
 use Laravel\SerializableClosure\SerializableClosure;
-use RuntimeException;
 use UnitEnum;
 
 final class FractionBuilder implements Arrayable

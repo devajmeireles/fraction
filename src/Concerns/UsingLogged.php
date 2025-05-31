@@ -16,11 +16,12 @@ trait UsingLogged
     /**
      * Enable the action to be deferred.
      *
+     * @param  string|null  $channel  - `null` to use the default logging channel.
      * @return $this
      */
     public function logged(?string $channel = null): self
     {
-        $this->logged = new LoggedUsing($channel);
+        $this->logged = new LoggedUsing($channel ?? config('logging.default'));
 
         return $this;
     }

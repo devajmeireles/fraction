@@ -86,8 +86,10 @@ execute('send welcome email', function () {
 })->logged(channel: 'stack');
 ```
 
-Behind the scenes, this will write a log to the requested channel to help you understand the exact moment the action was performed. The log output will be assembled as follows:
+Behind the scenes, this will write a log to the requested `channel` to help you understand the exact moment the action was performed. The log output will be written as follows:
 
 ```txt
 [2025-05-31 21:04:10] local.INFO: [<app.name>] Action: [<action name>] executed at 2025-05-31 21:04:10 
 ```
+
+Keep in mind the log is written right after the process is dispatched, which means the log output does not represent the exact moment the action logic was executed. For situations where you are interacting with `deferred` or `queued` actions, you might see a difference between the log time and the actual execution time of the action logic, due to the way these actions are processed.
