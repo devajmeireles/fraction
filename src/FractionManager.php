@@ -7,6 +7,7 @@ namespace Fraction;
 use Closure;
 use Fraction\Exceptions\ActionNotRegistered;
 use Fraction\Exceptions\UnallowedActionDuplication;
+use Fraction\Support\Bootable;
 use Fraction\Support\FractionName;
 use Illuminate\Foundation\Application;
 use UnitEnum;
@@ -61,35 +62,6 @@ final class FractionManager
      */
     public function boot(): void
     {
-        $cached = [];
-
-        if ($this->application->isProduction() && file_exists($path = base_path('bootstrap/cache/actions.php'))) {
-            $files = require $path;
-
-            foreach ($files as $file) {
-                require_once $file;
-            }
-        } else {
-            $files = glob(config('fraction.path').'/*.php');
-
-            foreach ($files as $file) {
-                $content = file_get_contents($file);
-
-                if (mb_strpos($content, 'namespace') !== false || mb_strpos($content, 'execute') === false) {
-                    continue;
-                }
-
-                $cached[] = $file;
-
-                require_once $file;
-            }
-
-            if ($cached !== []) {
-                file_put_contents(
-                    base_path('bootstrap/cache/actions.php'),
-                    '<?php return '.var_export($cached, true).';'
-                );
-            }
-        }
+        Bootable::fire($this->application);
     }
 }

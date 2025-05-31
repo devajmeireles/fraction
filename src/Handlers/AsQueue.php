@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Fraction\Interpreters;
+namespace Fraction\Handlers;
 
-use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Configurable\QueueUsing;
 use Fraction\Contracts\Configurable;
 use Fraction\Contracts\ShouldInterpreter;
+use Fraction\Handlers\Concerns\ShareableInterpreter;
 use Fraction\Jobs\FractionJob;
 use Illuminate\Container\Container;
 use Illuminate\Foundation\Bus\PendingDispatch;

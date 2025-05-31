@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use UnitEnum;
 
+/** @internal */
 final class FractionName
 {
     /**

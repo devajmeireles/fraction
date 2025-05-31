@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-use Fraction\Concerns\ShareableInterpreter;
+use Fraction\Concerns\UsingDefer;
+use Fraction\Concerns\UsingQueue;
+use Fraction\Concerns\UsingRescue;
+use Fraction\Concerns\UsingThen;
 use Fraction\Console\MakeActionCommand;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Exceptions\ActionNotRegistered;
@@ -13,10 +16,12 @@ use Fraction\Facades\Fraction;
 use Fraction\FractionBuilder;
 use Fraction\FractionManager;
 use Fraction\FractionServiceProvider;
-use Fraction\Interpreters\AsDefault;
-use Fraction\Interpreters\AsDefer;
-use Fraction\Interpreters\AsQueue;
+use Fraction\Handlers\AsDefer;
+use Fraction\Handlers\AsQueue;
+use Fraction\Handlers\AsSync;
+use Fraction\Handlers\Concerns\ShareableInterpreter;
 use Fraction\Jobs\FractionJob;
+use Fraction\Support\Bootable;
 use Fraction\Support\DependencyResolver;
 use Fraction\Support\FractionName;
 use Fraction\ValueObjects\Then;
@@ -32,9 +37,18 @@ test('should not use dangerous functions in PHP files')
     ->toBeUsed();
 
 arch()
+    ->expect([
+        UsingDefer::class,
+        UsingQueue::class,
+        UsingThen::class,
+        UsingRescue::class,
+    ])
+    ->toOnlyBeUsedIn(FractionBuilder::class);
+
+arch()
     ->expect(ShareableInterpreter::class)
     ->toOnlyBeUsedIn([
-        AsDefault::class,
+        AsSync::class,
         AsQueue::class,
         AsDefer::class,
     ])
@@ -80,7 +94,7 @@ arch()
 
 arch()
     ->expect([
-        AsDefault::class,
+        AsSync::class,
         AsDefer::class,
         AsQueue::class,
     ])
@@ -114,6 +128,17 @@ test('stub is valid', function () {
 
     expect($content)->toBe($original);
 });
+
+arch()
+    ->expect(Bootable::class)
+    ->toBeFinal()
+    ->toHaveConstructor()
+    ->toOnlyBeUsedIn(FractionManager::class)
+    ->toHaveMethods([
+        'files',
+        'files',
+        'require',
+    ]);
 
 arch()
     ->expect(DependencyResolver::class)
