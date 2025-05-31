@@ -16,12 +16,20 @@ use Illuminate\Http\Request;
 execute('create user', function (Request $request) {
     // ...
 })->then('send welcome user email');
+```
 
-// app/Actions/Emails.php
+```php
+<?php
+
+// app/Actions//Emails.php
 
 execute('send welcome user email', function (Request $request) {
     // ...
 })->then('enable free trial');
+```
+
+```php
+<?php
 
 // app/Actions/Products.php
 
