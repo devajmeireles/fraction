@@ -15,7 +15,7 @@ final class Then
      */
     public function __construct(public string $action, public string|UnitEnum $then)
     {
-        if ($action === FractionName::format($then)) {
+        if (FractionName::format($action) === FractionName::format($then)) {
             throw new PreventLoop();
         }
     }
