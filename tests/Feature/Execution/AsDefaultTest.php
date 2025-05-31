@@ -42,6 +42,20 @@ test('can execute using enum', function () {
     expect($test)->toBe(1);
 });
 
+test('can execute action inside action', function () {
+    execute('one', function () {
+        execute('two', function () {
+            return 2;
+        });
+
+        return run('two');
+    });
+
+    $test = run('one');
+
+    expect($test)->toBe(2);
+});
+
 test('resolve laravel dependencies', function () {
     execute('testing', function (Request $request) {
         return $request->method();
