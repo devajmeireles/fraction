@@ -174,3 +174,27 @@ execute('send welcome email', function () {
 Behind the scenes, this will register the action to dispatch the `Fraction\Jobs\FractionJob` job, which will execute the action in the background.
 
 > You can pass parameters to the queued method to personalize the queued execution.
+
+## Rescued Actions
+
+You can trigger rescued actions simply by using the `rescued` method following the action declaration:
+
+```php
+<?php
+
+execute('send welcome email', function () {
+    // ...
+})->rescued();
+```
+
+Behind the scenes, this will register the action to execute the function inside the `rescue` Laravel's function, which aims to do not stop the execution of the application in case of an error.
+
+You can also pass a default value to the `rescued` method, which will be returned in case of an error:
+
+```php
+<?php
+
+execute('send welcome email', function () {
+    throw new Exception('ops!');
+})->rescued(default: false);
+```

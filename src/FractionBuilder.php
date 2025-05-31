@@ -7,7 +7,7 @@ namespace Fraction;
 use Closure;
 use Fraction\Configurable\DeferUsing;
 use Fraction\Configurable\QueueUsing;
-use Fraction\Contracts\Configurable;
+use Fraction\Configurable\RescuedUsing;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Exceptions\PreventDeferQueueSameTime;
 use Fraction\Interpreters\AsDefault;
@@ -39,6 +39,11 @@ final class FractionBuilder implements Arrayable
      * Configuration for deferring the action.
      */
     private ?DeferUsing $deferred = null;
+
+    /**
+     * Indicates if the action should be rescued.
+     */
+    private ?RescuedUsing $rescued = null;
 
     public function __construct(
         public Application $application,
@@ -76,8 +81,8 @@ final class FractionBuilder implements Arrayable
 
         $instance = $interpreter->then($this->then);
 
-        if ($interpreter instanceof Configurable && ($this->queued || $this->deferred)) {
-            $interpreter->configure($this->queued?->toArray() ?? $this->deferred->toArray());
+        if ($this->queued || $this->deferred || $this->rescued) {
+            $interpreter->configure($this->queued?->toArray() ?? $this->deferred?->toArray() ?? $this->rescued?->toArray());
         }
 
         $result = $instance->handle($this->application);
@@ -128,6 +133,18 @@ final class FractionBuilder implements Arrayable
         return $this;
     }
 
+    /**
+     * Enable the action to be rescued.
+     *
+     * @return $this
+     */
+    public function rescued(mixed $default = null): self
+    {
+        $this->rescued = new RescuedUsing($default);
+
+        return $this;
+    }
+
     /** {@inheritDoc} */
     public function toArray(): array
     {
@@ -137,6 +154,7 @@ final class FractionBuilder implements Arrayable
             'then'     => $this->then,
             'queued'   => $this->queued,
             'deferred' => $this->deferred,
+            'rescued'  => $this->rescued,
         ];
     }
 }

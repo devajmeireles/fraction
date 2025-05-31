@@ -124,6 +124,26 @@ test('call then', function () {
         ->toBeTrue();
 });
 
+test('call rescued', function () {
+    execute('one', function () {
+        throw new Exception('foo');
+    })->rescued();
+
+    $test = run('one');
+
+    expect($test)->toBeNull();
+});
+
+test('call rescued using default value', function () {
+    execute('one', function () {
+        throw new Exception('foo');
+    })->rescued('bar');
+
+    $test = run('one');
+
+    expect($test)->toBe('bar');
+});
+
 test('call then sharing data', function () {
     CacheFacade::put('foo', 'foo-bar-baz-bah', 10);
 

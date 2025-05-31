@@ -11,6 +11,9 @@ use Laravel\SerializableClosure\SerializableClosure;
 
 trait ShareableInterpreter
 {
+    /**
+     * The array of "then" hooks.
+     */
     public array $then = [];
 
     public function __construct(
