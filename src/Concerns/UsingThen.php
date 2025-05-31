@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fraction\Concerns\Builder;
+namespace Fraction\Concerns;
 
 use Fraction\ValueObjects\Then;
 use UnitEnum;

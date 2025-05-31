@@ -21,10 +21,10 @@ use UnitEnum;
 
 final class FractionBuilder implements Arrayable
 {
-    use Concerns\Builder\UsingDefer;
-    use Concerns\Builder\UsingQueue;
-    use Concerns\Builder\UsingRescue;
-    use Concerns\Builder\UsingThen;
+    use Concerns\UsingDefer;
+    use Concerns\UsingQueue;
+    use Concerns\UsingRescue;
+    use Concerns\UsingThen;
 
     public function __construct(
         public Application $application,

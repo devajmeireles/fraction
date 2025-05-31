@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use Fraction\Concerns\UsingDefer;
+use Fraction\Concerns\UsingQueue;
+use Fraction\Concerns\UsingRescue;
+use Fraction\Concerns\UsingThen;
 use Fraction\Console\MakeActionCommand;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Exceptions\ActionNotRegistered;
@@ -30,6 +34,15 @@ test('should not use dangerous functions in PHP files')
     ->expect(['dd', 'dump', 'exit', 'ray', 'var_dump'])
     ->not
     ->toBeUsed();
+
+arch()
+    ->expect([
+        UsingDefer::class,
+        UsingQueue::class,
+        UsingThen::class,
+        UsingRescue::class,
+    ])
+    ->toOnlyBeUsedIn(FractionBuilder::class);
 
 arch()
     ->expect(ShareableInterpreter::class)
