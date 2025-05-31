@@ -6,7 +6,11 @@ namespace Fraction\Support;
 
 use Illuminate\Foundation\Application;
 
-/** @internal */
+/**
+ * @internal
+ *
+ * @codeCoverageIgnore
+ */
 final readonly class Bootable
 {
     public function __construct(private Application $application)
