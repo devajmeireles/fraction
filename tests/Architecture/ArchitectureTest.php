@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Console\MakeActionCommand;
 use Fraction\Contracts\ShouldInterpreter;
 use Fraction\Exceptions\ActionNotRegistered;
@@ -16,6 +15,7 @@ use Fraction\FractionServiceProvider;
 use Fraction\Handlers\AsDefer;
 use Fraction\Handlers\AsQueue;
 use Fraction\Handlers\AsSync;
+use Fraction\Handlers\Concerns\ShareableInterpreter;
 use Fraction\Jobs\FractionJob;
 use Fraction\Support\DependencyResolver;
 use Fraction\Support\FractionName;

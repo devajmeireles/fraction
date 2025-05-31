@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fraction\Concerns;
+namespace Fraction\Handlers\Concerns;
 
 use Fraction\Support\DependencyResolver;
 use Fraction\ValueObjects\Then;

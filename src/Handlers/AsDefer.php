@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Fraction\Handlers;
 
-use Fraction\Concerns\ShareableInterpreter;
 use Fraction\Configurable\DeferUsing;
 use Fraction\Contracts\Configurable;
 use Fraction\Contracts\ShouldInterpreter;
+use Fraction\Handlers\Concerns\ShareableInterpreter;
 use Illuminate\Container\Container;
 
 final class AsDefer implements Configurable, ShouldInterpreter
