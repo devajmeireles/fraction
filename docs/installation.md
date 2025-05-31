@@ -11,4 +11,7 @@ There is nothing special in its installation, just run the following command in 
 ```bash
 composer require fraction/fraction:^1.0
 ```
-After that, [you can start using the package in your Laravel application](/using/).
+
+> _Fraction_ is not yet ready to be installed via _composer_.
+
+After that, [you can start using the package in your Laravel application](using.md).
