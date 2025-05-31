@@ -71,3 +71,23 @@ execute('send welcome email', function () {
 ```php
 $result = run('send welcome email'); // false
 ```
+
+## Logged Actions
+
+You can trigger logged actions simply by using the `logged` method following the action declaration:
+
+```php
+<?php
+
+// app/Actions/Emails.php
+
+execute('send welcome email', function () {
+    // ...
+})->logged(channel: 'stack');
+```
+
+Behind the scenes, this will write a log to the requested channel to help you understand the exact moment the action was performed. The log output will be assembled as follows:
+
+```txt
+[2025-05-31 21:04:10] local.INFO: [<app.name>] Action: [<action name>] executed at 2025-05-31 21:04:10 
+```

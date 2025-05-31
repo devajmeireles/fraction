@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae9fdb275f26300643a639f3438a60ed",
+    "content-hash": "a37c74159fe31c3dfc601e187b763694",
     "packages": [
         {
             "name": "brick/math",
@@ -9773,6 +9773,66 @@
             "time": "2024-03-03T12:36:25+00:00"
         },
         {
+            "name": "timacdonald/log-fake",
+            "version": "v2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/timacdonald/log-fake.git",
+                "reference": "6e052e5b32fe3d1854dafcacd4435c5b83b9721e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/timacdonald/log-fake/zipball/6e052e5b32fe3d1854dafcacd4435c5b83b9721e",
+                "reference": "6e052e5b32fe3d1854dafcacd4435c5b83b9721e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/collections": "^11.0 || ^12.0",
+                "illuminate/contracts": "^11.0 || ^12.0",
+                "illuminate/log": "^11.0 || ^12.0",
+                "illuminate/support": "^11.0 || ^12.0",
+                "php": "^8.2",
+                "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
+                "symfony/var-dumper": "^7.0"
+            },
+            "require-dev": {
+                "illuminate/config": "^11.0 || ^12.0",
+                "illuminate/container": "^11.0 || ^12.0",
+                "timacdonald/callable-fake": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "TiMacDonald\\Log\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim MacDonald",
+                    "email": "hello@timacdonald.me",
+                    "homepage": "https://timacdonald.me"
+                }
+            ],
+            "description": "A drop in fake logger for testing with the Laravel framework.",
+            "keywords": [
+                "fake",
+                "laravel",
+                "log",
+                "logger",
+                "testing"
+            ],
+            "support": {
+                "issues": "https://github.com/timacdonald/log-fake/issues",
+                "source": "https://github.com/timacdonald/log-fake/tree/v2.4.0"
+            },
+            "time": "2025-03-10T23:38:55+00:00"
+        },
+        {
             "name": "tomasvotruba/type-coverage",
             "version": "2.0.2",
             "source": {
@@ -9831,7 +9891,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,

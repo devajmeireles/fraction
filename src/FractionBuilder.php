@@ -23,6 +23,7 @@ use UnitEnum;
 final class FractionBuilder implements Arrayable
 {
     use Concerns\UsingDefer;
+    use Concerns\UsingLogged;
     use Concerns\UsingQueue;
     use Concerns\UsingRescue;
     use Concerns\UsingThen;
@@ -69,8 +70,13 @@ final class FractionBuilder implements Arrayable
 
         $result = $interpreter->then($this->then)->handle($this->application);
 
-        if ($this->queued || $this->deferred) {
-            return true;
+        if ($this->logged !== null) {
+            $this->application->make('log')
+                ->channel($this->logged->channel)
+                ->info(__($this->logged->message, [
+                    'name'   => config('app.name'),
+                    'action' => $this->action,
+                ]));
         }
 
         return $result;

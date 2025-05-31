@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Fraction\Concerns\UsingDefer;
+use Fraction\Concerns\UsingLogged;
 use Fraction\Concerns\UsingQueue;
 use Fraction\Concerns\UsingRescue;
 use Fraction\Concerns\UsingThen;
@@ -42,8 +43,29 @@ arch()
         UsingQueue::class,
         UsingThen::class,
         UsingRescue::class,
+        UsingLogged::class,
     ])
     ->toOnlyBeUsedIn(FractionBuilder::class);
+
+arch()
+    ->expect(UsingDefer::class)
+    ->toHaveMethod('deferred');
+
+arch()
+    ->expect(UsingQueue::class)
+    ->toHaveMethod('queued');
+
+arch()
+    ->expect(UsingThen::class)
+    ->toHaveMethod('then');
+
+arch()
+    ->expect(UsingRescue::class)
+    ->toHaveMethod('rescued');
+
+arch()
+    ->expect(UsingLogged::class)
+    ->toHaveMethod('logged');
 
 arch()
     ->expect(ShareableInterpreter::class)

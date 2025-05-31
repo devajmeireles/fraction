@@ -32,7 +32,8 @@
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.0",
         "orchestra/testbench": "^9.0",
-        "rector/rector": "^2.0"
+        "rector/rector": "^2.0",
+        "timacdonald/log-fake": "^2.4"
     },
     "extra": {
         "laravel": {

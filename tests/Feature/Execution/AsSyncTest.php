@@ -10,6 +10,9 @@ use Illuminate\Cache\Repository;
 use Illuminate\Container\Attributes\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache as CacheFacade;
+use Illuminate\Support\Facades\Log;
+use TiMacDonald\Log\LogEntry;
+use TiMacDonald\Log\LogFake;
 
 beforeEach(fn () => __delete());
 
@@ -132,6 +135,24 @@ test('call rescued', function () {
     $test = run('one');
 
     expect($test)->toBeNull();
+});
+
+test('call logged', function () {
+    LogFake::bind();
+
+    $this->travelTo(now()->createFromTimeString('2025-05-31 21:17:06'));
+
+    execute('one', function () {
+        return 1;
+    })->logged();
+
+    $test = run('one');
+
+    expect($test)->toBe(1);
+
+    Log::assertLogged(fn (LogEntry $log) => $log->level === 'info'
+        && $log->message === '[Laravel] Action: [one] executed at 2025-05-31 21:17:06'
+    );
 });
 
 test('call rescued using default value', function () {
