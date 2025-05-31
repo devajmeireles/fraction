@@ -21,6 +21,7 @@ use Fraction\Handlers\AsQueue;
 use Fraction\Handlers\AsSync;
 use Fraction\Handlers\Concerns\ShareableInterpreter;
 use Fraction\Jobs\FractionJob;
+use Fraction\Support\Bootable;
 use Fraction\Support\DependencyResolver;
 use Fraction\Support\FractionName;
 use Fraction\ValueObjects\Then;
@@ -127,6 +128,17 @@ test('stub is valid', function () {
 
     expect($content)->toBe($original);
 });
+
+arch()
+    ->expect(Bootable::class)
+    ->toBeFinal()
+    ->toHaveConstructor()
+    ->toOnlyBeUsedIn(FractionManager::class)
+    ->toHaveMethods([
+        'files',
+        'files',
+        'require',
+    ]);
 
 arch()
     ->expect(DependencyResolver::class)
