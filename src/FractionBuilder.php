@@ -42,10 +42,12 @@ final class FractionBuilder implements Arrayable
 
     public function __construct(
         public Application $application,
-        public string $action,
+        public string|UnitEnum $action,
         public Closure $closure
     ) {
-        // ...
+        $this->action = $this->action instanceof UnitEnum
+            ? $this->action->name
+            : $this->action;
     }
 
     /**

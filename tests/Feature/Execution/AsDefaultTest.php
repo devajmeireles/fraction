@@ -32,6 +32,16 @@ test('basic', function (mixed $data) {
     [1, 2, 3],
 ]);
 
+test('can execute using enum', function () {
+    execute(Actions::Testing, function () {
+        return 1;
+    });
+
+    $test = run(Actions::Testing);
+
+    expect($test)->toBe(1);
+});
+
 test('resolve laravel dependencies', function () {
     execute('testing', function (Request $request) {
         return $request->method();
@@ -209,3 +219,8 @@ test('cannot set queued and deferred at same time', function () {
 
     run('testing');
 })->throws(PreventDeferQueueSameTime::class, 'The action [testing] cannot use defer and queue at the same time.');
+
+enum Actions
+{
+    case Testing;
+}
