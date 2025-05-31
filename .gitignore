@@ -7,3 +7,4 @@ _DS_Store
 .php-cs-fixer.cache
 .DS_Store
 .run
+.cache
