@@ -29,7 +29,7 @@ See what the same example would look like with _Fraction_:
 ```php
 <?php
 
-// app/Actions/CreateUser.php
+// app/Actions/Users.php
 
 execute('create user', function (array $data) {
     return User::create($data);
