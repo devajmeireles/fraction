@@ -4,7 +4,7 @@ title: Using
 
 ## File Map
 
-Since _Fraction for Laravel_ actions are executed by functions - there is no namespace, to speed up performance, a specific directory is mapped, by default: `App/Actions`. However, you can change this directory by publishing the configuration file:
+Since _Fraction_ actions are executed by functions - there is no namespace, to speed up performance, a specific directory is mapped, by default: `App/Actions`. However, you can change this directory by publishing the configuration file:
 
 ```bash
 php artisan vendor:publish --tag=fraction-config
@@ -75,13 +75,13 @@ class UserController extends Controller
 }
 ```
 
-Como você deve ter observado acima, o objeto do usuário é retornado da ação `send welcome email`. Você pode retornar qualquer coisa de uma ação. O valor retornado será recebido pela execução da função `run`.
+As you may have noticed above, the user object is returned from the `send welcome email` action. You can return anything from an action. The returned value will be received by executing the `run` function.
 
-> Ações `queued` e `deferred` retornam apenas `true`.
+> The `queued` e `deferred` only returns `true`.
 
 ## Support UnitEnum
 
-Você deve ter observado que os exemplos acima utilizam strings para identificar as ações. No entanto, você também pode usar `UnitEnum` para definir suas ações através de cases, o que pode ser útil para evitar erros de escrita.
+You can also use `UnitEnum` to define your actions through cases, which can be useful to avoid writing errors.
 
 ```php
 <?php
@@ -104,7 +104,7 @@ execute(UserActions::SendWelcomeEmail, function () {
 });
 ```
 
-Dessa forma, a chamada da ação também deve ser feita utilizando o enum:
+You should call the action using the enum as well:
 
 ```php
 <?php
@@ -130,7 +130,7 @@ execute('send welcome email', function (Request $request) {
 });
 ```
 
-Obviously, the _Fraction for Laravel_ can also resolve the new container's attribute:
+Obviously, the _Fraction_ can also resolve the new container's attribute:
 
 ```php
 <?php
@@ -157,7 +157,7 @@ execute('send welcome email', function () {
 
 Behind the scenes, this will register the action as a deferred action, using the `Illuminate\Support\defer` function.
 
-> You can pass arguments to the deferred method to personalize the deferred execution.
+> You can pass parameters to the deferred method to personalize the deferred execution.
 
 ## Queued Actions
 
@@ -173,4 +173,4 @@ execute('send welcome email', function () {
 
 Behind the scenes, this will register the action to dispatch the `Fraction\Jobs\FractionJob` job, which will execute the action in the background.
 
-> You can pass arguments to the queued method to personalize the queued execution.
+> You can pass parameters to the queued method to personalize the queued execution.

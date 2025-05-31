@@ -4,34 +4,32 @@ title: Action Hooks
 
 # Concept
 
-Similar ao sistema de Eventos e Listeners do Laravel, o sistema de hooks do _Fraction for Laravel_ permite que você execute ações em sequência, também conhecido similarmente ao conceito de um _pipeline_.
-
-Para funcionar adequadamente, você deve registrar suas ações utilizando o método `then()` e especificando o nome da ação a ser executada em sequência.
+Similar to the Laravel's Event and Listener system, the _Fraction_ hook system allows you to execute actions in sequence, also similarly to the concept of a _pipeline_. For this, you shoul call the `then` method after registering an action:
 
 ```php
 <?php
 
 use Illuminate\Http\Request;
 
+// app/Actions/Users.php
+
 execute('create user', function (Request $request) {
     // ...
-})->then('send welcome email');
+})->then('send welcome user email');
 
-execute('send welcome email', function (Request $request) {
+// app/Actions/Emails.php
+
+execute('send welcome user email', function (Request $request) {
     // ...
 });
 ```
 
-> Uma ação não pode chamar a si próprio em sequência.
-
-## Registering in Different Places
-
-Não importa se você registrar as ações em um só arquivo ou em arquivos diferentes, o `then` será capaz de encontrar e executar a ação.
+> An action cannot call itself in a hook.
 
 ## Shared Parameters
 
-Como você pode observar no exemplo acima, a instância de `Illuminate\Http\Request` se repete entre ambas as ações, `create user` e `send welcome email`. Isso acontece porque todos os parametros enviados para uma ação é repassada as outras usando o sistema de hooks.
+As you can see in the example above, the `Illuminate\Http\Request` instance is repeated between both the `create user` and `send welcome email` actions. This happens because all the parameters sent to one action are passed to the others using the hook system.
 
 ## Undetected Loop
 
-Por padrão o único loop detectado pelo _Fraction for Laravel_ é a tentativa de fazer com que o `then` chame a própria função que o desparou. Nada impede que você crie um efeito `ping` `pong`, isso fica totalmente a seu critério, considerando que você pode criar um loop infinito com isso.
+By default, the only loop detected by _Fraction_ is the attempt to make `then` call the function that triggered it. There is nothing stopping you from creating a `ping` `pong` effect, this is completely up to you, considering that you can create an infinite loop with this.

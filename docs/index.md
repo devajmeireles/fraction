@@ -22,9 +22,9 @@ class CreateUser
 }
 ```
 
-We have a namespace, a class, a method, a return type, a model import, an array as arguments... all of this to create a user. It's overkill for such a simple task, isn't it? For this reason, the _Fraction for Laravel_ solution is revolutionary in the context of Actions. _Fraction for Laravel_ allows you to write actions in a simpler and more direct way, without the need for all this structure, **similar to what PestPHP proposes.**
+We have a namespace, a class, a method, a return type, a model import, an array as arguments... all of this to create a user. It's overkill for such a simple task, isn't it? For this reason, the _Fraction_ solution is revolutionary in the context of Actions. _Fraction_ allows you to write actions in a simpler and more direct way, without the need for all this structure, **similar to what PestPHP proposes.**
 
-See what the same example would look like with _Fraction for Laravel_:
+See what the same example would look like with _Fraction_:
 
 ```php
 <?php
@@ -55,4 +55,4 @@ class CreateUserController extends Controller
 }
 ```
 
-With _Fraction for Laravel_ you will focus on simplifying action creation while maintaining code clarity and readability and **focusing on what really matters: the action logic.** No classes, no namespaces, no fluff, **just what matters: the action logic.**
+With _Fraction_ you will focus on simplifying action creation while maintaining code clarity and readability and **focusing on what really matters: the action logic.** No classes, no namespaces, no fluff, **just what matters: the action logic.**

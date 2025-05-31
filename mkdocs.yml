@@ -19,7 +19,7 @@ extra:
   generator: false
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/devajmeireles
+      link: https://github.com/devajmeireles/fraction
 
     - icon: fontawesome/brands/linkedin
       link: https://linkedin.com/in/devajmeireles
@@ -40,4 +40,4 @@ nav:
   - Installation: installation.md
   - Using: using.md
   - Action Hooks: hooks.md
-  - Advanced: advanced.md
+  - Deployment: deployment.md
