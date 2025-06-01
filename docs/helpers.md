@@ -81,3 +81,38 @@ Behind the scenes, this will write a log to the requested `channel` to help you 
 ```
 
 Keep in mind the log is written right after the process is dispatched, which means the log output does not represent the exact moment the action logic was executed. For situations where you are interacting with `deferred` or `queued` actions, you might see a difference between the log time and the actual execution time of the action logic, due to the way these actions are processed.
+
+## Ignoring Helpers at Runtime
+
+Now that you've read about helpers, you might be wondering if there's a way to ignore a specific helper to be applied to an action at runtime, am I right? The answer is: yes, you can determine an action as, for example, `deferred`, but ignore the `deferred` at runtime:
+
+You don't need to do anything special in the action itself:
+
+```php
+// app/Actions/CreateUser.php
+
+execute('create user', function () {
+    // ...
+})->deferred();
+```
+
+Since you may still need to perform this action as deferred at any time, you need to interact with the `run` function to bypass the `deferred` helper at runtime:
+
+```php {3}
+// ...
+
+run('create user', deferred: false); // [!code focus]
+```
+
+This way, the action will still be logged as a `deferred` action, but it will not be executed as a deferred action at the runtime you want to avoid. The same applies to the other helpers, such as `queued`, `rescued`, `logged`, and `then`.
+
+Here is the complete list of options you can use to ignore helpers at runtime:
+
+| Term              |                         What |
+|-------------------|-----------------------------:|
+| `deferred: false` | To ignore `deferred` actions |
+| `queued: false`   |   To ignore `queued` actions |
+| `rescued: false`  |  To ignore `rescued` actions |
+| `logged: false`   |   To ignore `logged` actions |
+| `logged: false`   |   To ignore `logged` actions |
+| `then: false`     |              To ignore hooks |
