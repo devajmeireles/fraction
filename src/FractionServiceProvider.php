@@ -23,6 +23,7 @@ class FractionServiceProvider extends ServiceProvider
         $this->commands([
             Console\MakeActionCommand::class,
             Console\ActionOptimizeCommand::class,
+            Console\UnregisteredActionsCommand::class,
         ]);
     }
 
