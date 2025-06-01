@@ -61,6 +61,7 @@ Now you _should_ `run` the first action of the pipeline: `send welcome user emai
 
 ```php
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request\CreateUserRequest;
 
 class UserController extends Controller

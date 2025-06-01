@@ -151,7 +151,7 @@ test('call logged', function () {
     expect($test)->toBe(1);
 
     Log::assertLogged(fn (LogEntry $log) => $log->level === 'info'
-        && $log->message === '[Laravel] Action: [one] executed at 2025-05-31 21:17:06'
+        && $log->message === '[Laravel] Action: [one] executed.'
     );
 });
 

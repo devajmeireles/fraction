@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Fraction\Console;
 
-use Fraction\Facades\Fraction;
+use Exception;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\File;
-use SplFileInfo;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 use function Laravel\Prompts\table;
 
@@ -33,49 +33,78 @@ class UnregisteredActionsCommand extends Command
      */
     public function handle(): int
     {
-        $used  = [];
-        $path  = base_path('app/');
-        $files = collect(File::allFiles($path))->filter(fn (SplFileInfo $file) => str_ends_with($file->getFilename(), '.php'));
+        $find = 'run(';
 
-        /** @var SplFileInfo $file */
-        foreach ($files as $file) {
-            $content = file_get_contents($file->getRealPath());
+        $windows = windows_os();
 
-            preg_match_all("/run\(\s*['\"]([^'\"]+)['\"]\s*\)/", $content, $matches);
+        $command = $windows
+            ? ['findstr', '/S', '/N', '/I', $find, base_path('app').'\*.php']
+            : ['grep', '-rn', $find, base_path('app'), '--include=*.php'];
 
-            foreach ($matches[1] as $match) {
-                $used[$match][] = $file->getRelativePathname(); // @phpstan-ignore-line
-            }
-        }
+        $process = new Process($command);
 
-        if (empty($used)) {
-            $this->components->warn('No actions found in the codebase.');
+        try {
+            $process->mustRun();
 
-            return self::SUCCESS;
-        }
-
-        $actions = Fraction::all();
-
-        $defined   = array_values(array_unique(array_column($actions, 'action')));
-        $undefined = array_diff(array_keys($used), $defined);
-
-        if (! empty($undefined)) {
-            $this->components->warn(count($undefined).' occurrences found');
-
-            $rows = [];
-
-            foreach ($undefined as $action) {
-                $files  = implode(', ', array_unique($used[$action]));
-                $rows[] = [$files, $action];
-            }
-
-            table(headers: ['File', 'Unregistered Action'], rows: $rows);
+            return $this->output($process->getOutput());
+        } catch (ProcessFailedException) {
+            $this->components->error('No unregistered actions found in the codebase.');
+        } catch (Exception $exception) {
+            $this->components->error('Unexpected Error: '.$exception->getMessage());
 
             return self::FAILURE;
         }
 
-        $this->components->info('No wrong actions found in the codebase.');
-
         return self::SUCCESS;
+    }
+
+    /**
+     * Output the results of the search.
+     */
+    private function output(string $output): int
+    {
+        if (blank($output)) {
+            return self::SUCCESS;
+        }
+
+        $rows = [];
+
+        $lines = collect(explode(PHP_EOL, $output))->filter();
+
+        if ($lines->count() === 0) {
+            $this->components->info('No unregistered actions found.');
+
+            return self::SUCCESS;
+        }
+
+        $this->components->warn('Unregistered actions found:');
+
+        $lines->lazy()->each(function (string $line) use (&$rows): bool {
+            preg_match("/^(\/[^\s:]+):\d+:\s*.*?run\(\s*'([^']+)'\s*\)/", $line, $matches);
+
+            if (blank($line) || count($matches) < 3) {
+                return false;
+            }
+
+            $path = str($matches[0])
+                ->afterLast(base_path())
+                ->beforeLast(':')
+                ->replaceFirst('/', '')
+                ->value();
+
+            $rows[] = [$path, $matches[2]];
+
+            return true;
+        });
+
+        if ($rows === []) {
+            $this->components->info('No unregistered actions found.');
+
+            return self::SUCCESS;
+        }
+
+        table(['File', 'Unregistered Action'], $rows);
+
+        return self::FAILURE;
     }
 }

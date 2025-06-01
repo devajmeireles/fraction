@@ -4,8 +4,6 @@ title: Helpers
 
 If you've made it this far, you probably want to know some of the superpowers that _Fraction_ has, right? From here on, things get more interesting, in terms of features. Before diving into the reading, keep in mind that everything you'll see here is directly associated with the Laravel Way, but without resorting to nonsense.
 
-First, _"WHY do we need helpers?"_ The answer is simple: **to make your life easier**. _Fraction_ provides a set of helpers that allow you to create and manage actions in a more straightforward way. Let's explore some of these helpers.
-
 ## Deferred Actions
 
 As part of Laravel 11, you can trigger deferred actions simply by using the `deferred` method following the action declaration:
@@ -79,7 +77,7 @@ execute('create user', function () {
 Behind the scenes, this will write a log to the requested `channel` to help you understand the exact moment the action was performed. The log output will be written as follows:
 
 ```txt
-[2025-05-31 21:04:10] local.INFO: [<app.name>] Action: [<action name>] executed at 2025-05-31 21:04:10 
+[2025-05-31 21:04:10] local.INFO: [<app.name>] Action: [<action name>] executed. 
 ```
 
 Keep in mind the log is written right after the process is dispatched, which means the log output does not represent the exact moment the action logic was executed. For situations where you are interacting with `deferred` or `queued` actions, you might see a difference between the log time and the actual execution time of the action logic, due to the way these actions are processed.

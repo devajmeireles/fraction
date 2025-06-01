@@ -2,8 +2,6 @@
 title: Using
 ---
 
-## Creating and Using
-
 While you can create actions manually, there is a `make:action` command that can be used to make it easier to create actions via the terminal. The output of the command is like this:
 
 ```bash
@@ -47,6 +45,7 @@ The execution of the action in this case would be like this:
 
 ```php
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request\CreateUserRequest;
 
 class UserController extends Controller
@@ -64,7 +63,7 @@ And yes, you can return anything from an action. The returned value will be rece
 
 ## Problem & Solution
 
-One of the problems that was initially noticed when Fraction was created was that we interacted with strings. This is bad because if we forget a single letter, creating or executing the action can become a problem. For this reason you have two easy solutions - _one we will mention now and the other we will mention in the testing section._ You can also use `UnitEnum` to define your actions through cases, which can be useful to avoid writing errors.
+One of the problems that was initially noticed when Fraction was created was that we interacted with strings. This is bad because if we forget a single letter, creating or executing the action can become a problem. For this reason you have two easy solutions - [one we will mention now and the other we will mention in the testing section](/testing#handle-unregistered-actions). Your first option is use `UnitEnum` to define your actions through cases, which can be useful to avoid writing errors.
 
 ```php
 namespace App\Enums;

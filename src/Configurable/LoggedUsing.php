@@ -12,7 +12,7 @@ final class LoggedUsing implements Arrayable
         public ?string $channel = null,
         public ?string $message = null,
     ) {
-        $this->message = $message ?? __('[:name] Action: [:action] executed at :time', ['time' => now()->toDateTimeString()]);
+        $this->message = $message ?? __('[:name] Action: [:action] executed.');
     }
 
     /** {@inheritDoc} */
