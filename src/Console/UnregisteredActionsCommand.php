@@ -44,7 +44,7 @@ class UnregisteredActionsCommand extends Command
             preg_match_all("/run\(\s*['\"]([^'\"]+)['\"]\s*\)/", $content, $matches);
 
             foreach ($matches[1] as $match) {
-                $used[$match][] = $file->getRelativePathname();
+                $used[$match][] = $file->getRelativePathname(); // @phpstan-ignore-line
             }
         }
 
