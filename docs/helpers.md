@@ -1,87 +1,77 @@
 ---
-title: Using
+title: Helpers
 ---
 
-If you're familiar with modern Laravel, you'll know that there are dozens of things in Laravel that are useful in a variety of contexts, all of which are part of the _"Laravel Way"_. That's why _Fraction_ provides you with several useful helpers for creating your actions.
+If you've made it this far, you probably want to know some of the superpowers that _Fraction_ has, right? From here on, things get more interesting, in terms of features. Before diving into the reading, keep in mind that everything you'll see here is directly associated with the Laravel Way, but without resorting to nonsense.
+
+First, _"WHY do we need helpers?"_ The answer is simple: **to make your life easier**. _Fraction_ provides a set of helpers that allow you to create and manage actions in a more straightforward way. Let's explore some of these helpers.
 
 ## Deferred Actions
 
 As part of Laravel 11, you can trigger deferred actions simply by using the `deferred` method following the action declaration:
 
 ```php
-<?php
+// app/Actions/CreateUser.php
 
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
+execute('create user', function () {
     // ...
-})->deferred(name: 'send welcome email', always: true);
+})->deferred(name: 'createUser', always: true);
 ```
 
 Behind the scenes, this will register the action as a deferred action, using the `Illuminate\Support\defer` function.
 
-> Different the _sync actions_, `deferred` actions only returns `true` when executed successfully.
+> The `deferred` actions only returns `true`, when executed successfully.
 
 ## Queued Actions
 
 You can trigger queued actions simply by using the `queued` method following the action declaration:
 
 ```php
-<?php
+// app/Actions/CreateUser.php
 
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
+execute('create user', function () {
     // ...
 })->queued(delay: 10, queue: 'actions', connection: 'redis');
 ```
 
 Behind the scenes, this will register the action to dispatch the `Fraction\Jobs\FractionJob` job, which will execute the action in the background.
 
-> Different the _sync actions_, `queued` actions only returns `true` when executed successfully.
+> The `queued` actions only returns `true`, when executed successfully.
 
 ## Rescued Actions
 
 You can trigger rescued actions simply by using the `rescued` method following the action declaration:
 
 ```php
-<?php
+// app/Actions/CreateUser.php
 
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
+execute('create user', function () {
     // ...
 })->rescued();
 ```
 
-Behind the scenes, this will register the action to execute the function inside the `rescue` Laravel's function, which aims to do not stop the execution of the application in case of an error.
-
-You can also pass a default value to the `rescued` method, which will be returned in case of an error:
+Behind the scenes, this will register the action to execute the function inside the `rescue` Laravel's function, which aims to do not stop the execution of the application in case of an error. You can also pass a default value to the `rescued` method, which will be returned in case of an error:
 
 ```php
-<?php
+// app/Actions/CreateUser.php
 
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
+execute('create user', function () {
     throw new Exception('ops!');
 })->rescued(default: false);
 ```
 
 ```php
-$result = run('send welcome email'); // false
+$result = run('create user'); // false
 ```
 
 ## Logged Actions
 
-You can trigger logged actions simply by using the `logged` method following the action declaration:
+Do you, like me, sometimes need to know when an action was executed? With that in mind, you can trigger logged actions simply by using the `logged` method following the action declaration:
 
 ```php
-<?php
+// app/Actions/CreateUser.php
 
-// app/Actions/Emails.php
-
-execute('send welcome email', function () {
+execute('create user', function () {
     // ...
 })->logged(channel: 'stack');
 ```
