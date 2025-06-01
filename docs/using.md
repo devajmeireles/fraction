@@ -63,7 +63,7 @@ And yes, you can return anything from an action. The returned value will be rece
 
 ## Problem & Solution
 
-One of the problems that was initially noticed when Fraction was created was that we interacted with strings. This is bad because if we forget a single letter, creating or executing the action can become a problem. For this reason you have two easy solutions - [one we will mention now and the other we will mention in the testing section](/testing#handle-unregistered-actions). Your first option is use `UnitEnum` to define your actions through cases, which can be useful to avoid writing errors.
+One of the problems that was initially noticed when _Fraction_ was created was that we interacted with strings. This is bad because if we forget a single letter, creating or executing the action can become a problem. For this reason you have two easy solutions - [one we will mention now and the other we will mention in the testing section](/testing#handle-unregistered-actions). Your first option is use `UnitEnum` to define your actions through cases, which can be useful to avoid writing errors.
 
 ```php
 namespace App\Enums;
@@ -98,7 +98,7 @@ run(UserActions::CreateUser);
 
 Do you remember all the work we had to do in the past to get actions wrapped in the Laravel container by default, before using _Fraction_? That's one of the problems _Fraction_ solves: **everything related to _Fraction_ actions is encapsulated in the Laravel container by default.** <ins>Since actions are fully resolved by the Laravel container</ins>, you can rely on Laravel's dependency resolution to inject any necessary dependencies into the action. 
 
-For example, if you want to inject an instance of `Illuminate\Http\Request:
+For example, if you want to inject an instance of `Illuminate\Http\Request`:
 
 ```php
 // app/Actions/CreateUser.php
