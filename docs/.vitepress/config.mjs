@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/fraction/',
   title: "Fraction",
   description: "A small Laravel package that simplifies your experience with the Action Pattern.",
   head: [['link', { rel: 'icon', href: '/favicon.ico' }]],
