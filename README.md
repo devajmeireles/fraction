@@ -16,7 +16,7 @@ class CreateUser
 }
 ```
 
-We have a 1) Namespace, 2) Class, 3) Method... **All of this to create a user?** It's overkill for such a simple task, isn't it?
+We have a namespace, class, method... **All of this to create a user?** It's overkill for such a simple task, isn't it?
 
 For this reason, the _Fraction_ solution is revolutionary in the context of Actions. _Fraction_ allows you to write actions in a _simpler and more direct way_, without the need for all this structure, **similar to what _PestPHP_ proposes.**
 
