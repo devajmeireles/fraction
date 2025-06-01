@@ -7,10 +7,10 @@ namespace Fraction\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \Fraction\FractionManager mount(string|array $path)
+ * @method static \Fraction\FractionBuilder register(string|\UnitEnum $action, \Closure $closure)
+ * @method static \Fraction\FractionBuilder get(string|\UnitEnum $action)
+ * @method static array all()
  * @method static void boot()
- * @method static \Fraction\FractionBuilder register(string $action, \Closure $closure)
- * @method static \Closure get(string $action)
  *
  * @see \Fraction\FractionManager
  */

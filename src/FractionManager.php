@@ -14,6 +14,11 @@ use UnitEnum;
 
 final class FractionManager
 {
+    /**
+     * The array of registered fractions.
+     *
+     * @var array<string, FractionBuilder>
+     */
     private array $fractions = [];
 
     public function __construct(public Application $application)
@@ -48,13 +53,21 @@ final class FractionManager
      *
      * @throws ActionNotRegistered
      */
-    public function get(string|UnitEnum $action): mixed
+    public function get(string|UnitEnum $action): FractionBuilder
     {
         $original = $action;
 
         $action = FractionName::format($action);
 
         return $this->fractions[$action] ?? throw new ActionNotRegistered($original);
+    }
+
+    /**
+     * Get all registered actions.
+     */
+    public function all(): array
+    {
+        return $this->fractions;
     }
 
     /**

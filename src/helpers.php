@@ -21,7 +21,6 @@ if (! function_exists('run')) {
      */
     function run(string|UnitEnum $action, ...$args): mixed
     {
-        /** @var FractionBuilder $builder */
         $builder = Fraction::get($action);
 
         return $builder(...$args);
