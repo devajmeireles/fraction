@@ -49,13 +49,13 @@ class UnregisteredActionsCommand extends Command
             return $this->output($process->getOutput());
         } catch (ProcessFailedException) {
             $this->components->error('No unregistered actions found in the codebase.');
+
+            return self::SUCCESS;
         } catch (Exception $exception) {
             $this->components->error('Unexpected Error: '.$exception->getMessage());
 
             return self::FAILURE;
         }
-
-        return self::SUCCESS;
     }
 
     /**
