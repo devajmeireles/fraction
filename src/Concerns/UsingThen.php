@@ -14,7 +14,7 @@ trait UsingThen
      *
      * @var array<int, string>
      */
-    private array $then = [];
+    private ?array $then = [];
 
     /**
      * Register a "then" hook.

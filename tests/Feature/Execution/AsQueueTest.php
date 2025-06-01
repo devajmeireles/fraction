@@ -60,3 +60,13 @@ test('call then without fake', function () {
 
     expect(__exists('two'))->toBeTrue();
 });
+
+test('ignoring queue', function () {
+    execute('one', function () {
+        __output('cancelled');
+    })->queued();
+
+    run('one', queued: false);
+
+    expect(__exists('cancelled'))->toBeTrue();
+});

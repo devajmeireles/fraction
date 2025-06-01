@@ -45,6 +45,8 @@ final class FractionBuilder implements Arrayable
      */
     public function __invoke(...$arguments): mixed
     {
+        $arguments = $this->ignores($arguments);
+
         if ($this->queued !== null && $this->deferred !== null) {
             throw new PreventDeferQueueSameTime($this->action);
         }
@@ -68,7 +70,7 @@ final class FractionBuilder implements Arrayable
             }
         }
 
-        $result = $interpreter->then($this->then)->handle($this->application);
+        $result = $interpreter->then($this->then ?? [])->handle($this->application);
 
         if ($this->logged !== null) {
             $this->application->make('log')
@@ -111,5 +113,28 @@ final class FractionBuilder implements Arrayable
         }
 
         return [false, []];
+    }
+
+    /**
+     * Determines if helpers usage should be ignored.
+     */
+    private function ignores(array $arguments = []): array
+    {
+        if ($arguments === []) {
+            return $arguments;
+        }
+
+        $helpers = ['queued', 'deferred', 'rescued', 'logged', 'then'];
+        $unset   = array_intersect($helpers, array_keys($arguments));
+
+        foreach ($unset as $helper) {
+            if ($arguments[$helper] === false) {
+                $this->{$helper} = null;
+            }
+
+            unset($arguments[$helper]);
+        }
+
+        return $arguments;
     }
 }

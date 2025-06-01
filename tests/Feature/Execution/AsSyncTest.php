@@ -137,6 +137,14 @@ test('call rescued', function () {
     expect($test)->toBeNull();
 });
 
+test('ignoring rescued', function () {
+    execute('one', function () {
+        throw new Exception('foo');
+    })->rescued();
+
+    run('one', rescued: false);
+})->throws(Exception::class, 'foo');
+
 test('call logged', function () {
     LogFake::bind();
 
@@ -151,6 +159,20 @@ test('call logged', function () {
     expect($test)->toBe(1);
 
     Log::assertLogged(fn (LogEntry $log) => $log->level === 'info'
+        && $log->message === '[Laravel] Action: [one] executed.'
+    );
+});
+
+test('ignoring logged', function () {
+    LogFake::bind();
+
+    execute('one', function () {
+        __output('cancelled');
+    })->logged();
+
+    run('one', logged: false);
+
+    Log::assertNotLogged(fn (LogEntry $log) => $log->level === 'info'
         && $log->message === '[Laravel] Action: [one] executed.'
     );
 });

@@ -36,3 +36,13 @@ test('call then', function () {
 
     expect($test)->toBeTrue();
 });
+
+test('ignoring defer', function () {
+    execute('one', function () {
+        __output('cancelled');
+    })->deferred();
+
+    run('one', deferred: false);
+
+    expect(__exists('cancelled'))->toBeTrue();
+});
