@@ -16,7 +16,7 @@ export default defineConfig({
       {
         text: 'Meeting Fraction',
         items: [
-          { text: 'About', link: '/' },
+          { text: 'Introduction', link: '/introduction' },
           { text: 'Installation', link: '/installation' },
           { text: 'File Mapping', link: '/mapping' },
           { text: 'Using', link: '/using' },
@@ -40,6 +40,10 @@ export default defineConfig({
       }
     ],
 
-    logo: '/logo.png',
+    logo: { 
+      dark: '/logo.png', 
+      light: '/logo-color.png',
+      alt: 'Fraction Logo',
+    },
   }
 })
