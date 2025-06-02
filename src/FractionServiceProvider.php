@@ -19,7 +19,6 @@ class FractionServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 Console\MakeActionCommand::class,
-                Console\ActionOptimizeCommand::class,
                 Console\UnregisteredActionsCommand::class,
             ]);
         }
@@ -30,8 +29,6 @@ class FractionServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/config.php' => config_path('fraction.php'),
         ], 'fraction-config');
-
-        $this->optimizes(Console\ActionOptimizeCommand::class, Console\ActionOptimizeCommand::class, 'actions');
 
         Fraction::boot();
     }
