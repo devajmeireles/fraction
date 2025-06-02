@@ -16,15 +16,13 @@ class FractionServiceProvider extends ServiceProvider
 
         $this->mergeConfigFrom(__DIR__.'/config.php', 'fraction');
 
-        if (! $this->app->runningInConsole()) {
-            return;
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Console\MakeActionCommand::class,
+                Console\ActionOptimizeCommand::class,
+                Console\UnregisteredActionsCommand::class,
+            ]);
         }
-
-        $this->commands([
-            Console\MakeActionCommand::class,
-            Console\ActionOptimizeCommand::class,
-            Console\UnregisteredActionsCommand::class,
-        ]);
     }
 
     public function boot(): void
