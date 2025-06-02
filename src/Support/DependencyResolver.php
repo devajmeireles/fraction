@@ -64,7 +64,7 @@ final readonly class DependencyResolver
             /** @var ReflectionParameter|ReflectionNamedType $type */
             $type = $parameter->getType();
 
-            if ($type && ! $type->isBuiltin()) {
+            if ($type && (method_exists($type, 'isBuiltin') && ! $type->isBuiltin())) {
                 $resolved[] = $this->application->make($type->getName());
             } elseif ($parameter->isDefaultValueAvailable()) {
                 $resolved[] = $parameter->getDefaultValue();
