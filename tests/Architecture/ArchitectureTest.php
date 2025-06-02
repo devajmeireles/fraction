@@ -154,7 +154,6 @@ test('stub is valid', function () {
 arch()
     ->expect(Bootable::class)
     ->toBeFinal()
-    ->toHaveConstructor()
     ->toOnlyBeUsedIn(FractionManager::class)
     ->toHaveMethods([
         'files',

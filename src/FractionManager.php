@@ -75,6 +75,6 @@ final class FractionManager
      */
     public function boot(): void
     {
-        Bootable::fire($this->application);
+        Bootable::fire();
     }
 }
