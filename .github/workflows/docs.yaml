@@ -1,0 +1,17 @@
+name: Deploy Docs to Laravel Forge
+
+on:
+  push:
+    branches:
+      - 1.x
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: |
+          curl -X POST "${{ secrets.FORGE_DEPLOY_URL }}"
