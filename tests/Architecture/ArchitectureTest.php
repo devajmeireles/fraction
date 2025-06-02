@@ -158,7 +158,6 @@ arch()
     ->toHaveMethods([
         'files',
         'files',
-        'require',
     ]);
 
 arch()
