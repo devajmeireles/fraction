@@ -52,7 +52,7 @@ final readonly class Bootable
         foreach ($files as $file) {
             $cached[] = $file;
 
-            require_once $file;
+            require $file;
         }
 
         if ($this->application->isProduction() && $cached !== []) {
