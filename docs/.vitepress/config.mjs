@@ -22,7 +22,6 @@ export default defineConfig({
           { text: 'Using', link: '/using' },
           { text: 'Helpers', link: '/helpers' },
           { text: 'Hooks', link: '/hooks' },
-          { text: 'Deployment', link: '/deployment' },
           { text: 'Testing', link: '/testing' },
         ]
       }
