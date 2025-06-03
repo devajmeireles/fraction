@@ -1,6 +1,6 @@
 {
     "name": "fraction/fraction",
-    "description": "New way to interact with the Laravel action patterns.",
+    "description": "New way to interact with the Laravel Action pattern.",
     "type": "library",
     "license": "MIT",
     "autoload": {
