@@ -12,5 +12,5 @@ title: Installation
 There is nothing special in its installation, run the following command in your terminal:
 
 ```bash
-composer require fraction/fraction:^v1.0-beta
+composer require fraction/fraction:^1.0
 ```
