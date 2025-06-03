@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fraction\Console;
 
 use Exception;
+use Fraction\Facades\Fraction;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -77,12 +78,12 @@ class UnregisteredActionsCommand extends Command
             return self::SUCCESS;
         }
 
-        $this->components->warn('Unregistered actions found:');
+        $actions = collect(Fraction::all())->groupBy('action')->keys()->flip();
 
-        $lines->lazy()->each(function (string $line) use (&$rows): bool {
+        $lines->lazy()->each(function (string $line) use (&$rows, $actions): bool {
             preg_match("/^(\/[^\s:]+):\d+:\s*.*?run\(\s*'([^']+)'\s*\)/", $line, $matches);
 
-            if (blank($line) || count($matches) < 3) {
+            if (blank($line) || count($matches) < 3 || $actions->has($matches[2])) {
                 return false;
             }
 
@@ -101,6 +102,8 @@ class UnregisteredActionsCommand extends Command
             $this->components->info('No unregistered actions found.');
 
             return self::SUCCESS;
+        } else {
+            $this->components->warn('Unregistered actions found:');
         }
 
         table(['File', 'Unregistered Action'], $rows);
